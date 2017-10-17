@@ -39,10 +39,18 @@ public class LoginController {
             //使用code从微信服务器换取用户会话信息
             json2 = LoginSessionKeyUtil.getJSONData(code);
             if (JSON.parseObject(json2).getString("openid")!=null) {
-                //在过滤器中还要验证登录,前端会带上3rdsessionid
-                //还要将openid存入数据库中，判断数据库中是否已有该用户,无则创建
+
+                /*在过滤器中还要验证登录,前端会带上3rdsessionid
+                还要将openid存入数据库中，判断数据库中是否已有该用户,无则创建*/
+
                 userInfo = JSON.parseObject(json2, XCXUserSessionInfo.class);
-                thirdSessionId = Create3rdSessionID.createByUnix();
+                //判断操作系统类型
+                String os = System.getProperty("os.name");
+                if (os.contains("Windows")){
+                    thirdSessionId = Create3rdSessionID.createByOTH();
+                }else {
+                    thirdSessionId = Create3rdSessionID.createByUnix();
+                }
                 //存储3rd_session到redis中
                 RedisSaveSession saveSession = new RedisSaveSession();
                 boolean b = saveSession.save(

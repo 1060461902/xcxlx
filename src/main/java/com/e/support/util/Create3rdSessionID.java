@@ -2,6 +2,7 @@ package com.e.support.util;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.util.Random;
 
 /**
  * Created by asus on 2017/10/14.
@@ -35,5 +36,19 @@ public class Create3rdSessionID {
     * */
     public static String createByUnix(){
         return create("head -n 80 /dev/urandom | tr -dc A-Za-z0-9 | head -c 168");
+    }
+    /*
+    * Windows系统生成170位随机数
+    * */
+    public static String createByOTH(){
+        String base = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int baseLen = base.length();
+        Random random = new Random();
+        StringBuffer Keysb = new StringBuffer();
+        for(int i = 0; i<170; i++) {
+            int number = random.nextInt(baseLen);
+            Keysb.append(base.charAt(number));
+        }
+        return Keysb.toString();
     }
 }

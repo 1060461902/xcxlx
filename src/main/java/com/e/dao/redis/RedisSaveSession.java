@@ -2,7 +2,6 @@ package com.e.dao.redis;
 
 import com.e.support.util.RedisUtil;
 import org.apache.log4j.Logger;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
