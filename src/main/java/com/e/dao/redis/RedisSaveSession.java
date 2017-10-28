@@ -2,12 +2,14 @@ package com.e.dao.redis;
 
 import com.e.support.util.RedisUtil;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
 import java.io.IOException;
 import java.util.List;
 
+@Repository
 public class RedisSaveSession {
     /*
 * 存储3rd_sessionID 和 openid+session_key到redis中，并设置过期时间
