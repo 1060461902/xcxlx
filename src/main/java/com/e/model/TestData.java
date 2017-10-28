@@ -5,7 +5,7 @@ package com.e.model;
  */
 public class TestData {
     private int id;
-    private String data;
+    private String name;
 
     public int getId() {
         return id;
@@ -15,11 +15,11 @@ public class TestData {
         this.id = id;
     }
 
-    public String getData() {
-        return data;
+    public String getName() {
+        return name;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setName(String name) {
+        this.name = name;
     }
 }
