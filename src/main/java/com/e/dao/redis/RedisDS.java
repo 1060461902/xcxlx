@@ -8,11 +8,11 @@ import redis.clients.jedis.Jedis;
  * Created by asus on 2017/10/28.
  */
 @Repository
-public class ExpireTime {
+public class RedisDS {
     /*
     * 重置过期时间
     * @param key 要重置的键名, timeout设置的过期时间
-    * @return boolean 是否重置成功
+    * @return 是否重置成功
     * */
     public boolean resetExpireTime(String key,int timeout){
         boolean b = false;
@@ -22,5 +22,10 @@ public class ExpireTime {
             b = true;
         }
         return b;
+    }
+
+    public String getByKey(String key){
+        Jedis jedis = RedisUtil.getJedis();
+        return jedis.get(key);
     }
 }

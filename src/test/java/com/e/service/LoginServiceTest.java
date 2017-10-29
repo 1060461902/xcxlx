@@ -1,5 +1,6 @@
 package com.e.service;
 
+import com.e.service.user.LoginService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

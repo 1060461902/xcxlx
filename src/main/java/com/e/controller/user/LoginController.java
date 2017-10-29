@@ -1,13 +1,12 @@
-package com.e.controller;
+package com.e.controller.user;
 
-import com.e.service.LoginService;
+import com.e.service.user.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,7 +20,7 @@ public class LoginController {
     LoginService loginService;
 
     @RequestMapping(value = "/login.wx",method = RequestMethod.POST)
-    public String test(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String login(HttpServletRequest request) throws IOException {
         InputStream inputStream = request.getInputStream();
         String thirdSessionId = loginService.login(inputStream);
         return thirdSessionId;

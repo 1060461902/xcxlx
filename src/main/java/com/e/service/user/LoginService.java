@@ -1,10 +1,10 @@
-package com.e.service;
+package com.e.service.user;
 
 import com.alibaba.fastjson.JSON;
-import com.e.controller.LoginController;
+import com.e.controller.user.LoginController;
 import com.e.dao.redis.RedisSaveSession;
 import com.e.model.ErrorMsg;
-import com.e.model.XCXUserSessionInfo;
+import com.e.model.user.XCXUserSessionInfo;
 import com.e.support.util.Create3rdSessionID;
 import com.e.support.util.StringFromIsUtil;
 import com.e.support.util.json.LoginSessionKeyUtil;

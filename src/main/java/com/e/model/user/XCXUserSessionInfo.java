@@ -1,4 +1,4 @@
-package com.e.model;
+package com.e.model.user;
 
 /**
  * Created by asus on 2017/10/12.
