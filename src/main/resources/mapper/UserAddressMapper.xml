@@ -8,7 +8,7 @@
         INSERT INTO lx_address(address_id,openid,user_name,phone,address) VALUES (#{address_id},#{openid},#{user_name},#{phone},#{address})
     </insert>
     <delete id="delete" parameterType="java.lang.String">
-        DELETE FROM lx_address WHERE address_id=#{address_id}
+        DELETE FROM lx_address WHERE address_id=#{address_id} AND openid=#{openid}
     </delete>
     <update id="update" parameterType="com.e.model.user.UserAddress">
         UPDATE lx_address SET user_name=#{user_name},phone=#{phone},address=#{address} WHERE address_id=#{address_id} AND openid=#{openid}

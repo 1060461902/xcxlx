@@ -25,4 +25,20 @@ public class AddressController {
         }
         return iss;
     }
+    @RequestMapping(value = "/delete.wx",method = RequestMethod.POST)
+    public String deleteAddress(HttpServletRequest request) throws IOException {
+        String iss = "false";
+        if (service.delete(request)==true){
+            iss = "true";
+        }
+        return iss;
+    }
+    @RequestMapping(value = "/update.wx",method = RequestMethod.POST)
+    public String updateAddress(HttpServletRequest request) throws IOException {
+        String iss = "false";
+        if (service.update(request)==true){
+            iss = "true";
+        }
+        return iss;
+    }
 }

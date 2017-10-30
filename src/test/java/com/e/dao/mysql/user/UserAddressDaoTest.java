@@ -42,7 +42,7 @@ public class UserAddressDaoTest {
     @Test
     public void delete(){
         UserAddress userAddress = new UserAddress();
-        assertTrue(dao.delete("8h321"));
+        assertTrue(dao.delete("8h321","123asd"));
     }
 
 
