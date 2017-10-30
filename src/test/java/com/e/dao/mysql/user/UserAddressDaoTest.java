@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -45,5 +47,11 @@ public class UserAddressDaoTest {
         assertTrue(dao.delete("8h321","123asd"));
     }
 
+    @Test
+    public void get(){
+        String openid = "12381dasdh1231";
+        List<UserAddress> list = dao.get(openid);
+        System.out.println(list.get(0).getAddress_id());
+    }
 
 }

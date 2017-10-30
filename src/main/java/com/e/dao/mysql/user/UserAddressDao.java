@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by asus on 2017/10/29.
  */
@@ -14,4 +16,5 @@ public interface UserAddressDao {
     boolean add(UserAddress userAddress);
     boolean delete(@Param("address_id") String address_id, @Param("openid") String openid);
     boolean update(UserAddress userAddress);
+    List<UserAddress> get(@Param("openid") String openid);
 }

@@ -13,4 +13,7 @@
     <update id="update" parameterType="com.e.model.user.UserAddress">
         UPDATE lx_address SET user_name=#{user_name},phone=#{phone},address=#{address} WHERE address_id=#{address_id} AND openid=#{openid}
     </update>
+    <select id="get" parameterType="java.lang.String" resultType="com.e.model.user.UserAddress">
+        SELECT * FROM lx_address WHERE openid=#{openid}
+    </select>
 </mapper>

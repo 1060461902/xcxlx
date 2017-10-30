@@ -41,4 +41,8 @@ public class AddressController {
         }
         return iss;
     }
+    @RequestMapping(value = "/get.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    public String getAddresses(HttpServletRequest request) throws IOException {
+        return service.get(request);
+    }
 }
