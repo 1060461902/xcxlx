@@ -8,9 +8,11 @@ import java.util.ResourceBundle;
  * Created by asus on 2017/10/12.
  */
 public class LoginSessionKeyUtil{
-    /*
+    /**
     * 使用jscode换取微信服务器的用户会话信息
-    * */
+     * @param jscode 调起登录时前端传来的code
+    * @return 微信后台返回的json格式字符
+     * */
     public static String getJSONData(String jscode){
         ResourceBundle rb = ResourceBundle.getBundle("weixin");
         String uri = "https://api.weixin.qq.com/sns/jscode2session?" +

@@ -2,6 +2,7 @@ package com.e.model.user;
 
 /**
  * Created by asus on 2017/10/12.
+ * 调起登录时，微信后台返回的用户会话信息
  */
 public class XCXUserSessionInfo {
     //用户唯一标识

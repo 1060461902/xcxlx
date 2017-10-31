@@ -8,10 +8,12 @@ import redis.clients.jedis.Transaction;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * 存储3rd_session
+* */
 @Repository
 public class RedisSaveSession {
-    /*
+    /**
 * 存储3rd_sessionID 和 openid+session_key到redis中，并设置过期时间
 * @param key 3rd_sessionID
 * @param value openid+session_key

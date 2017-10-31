@@ -6,7 +6,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.ResourceBundle;
-/*
+/**
 * jedis池
 * */
 public class RedisUtil {
@@ -30,7 +30,7 @@ public class RedisUtil {
         pool = new JedisPool(config, bundle.getString("redis.ip"),
                 Integer.valueOf(bundle.getString("redis.port")));
     }
-    /*
+    /**
     * 从池中获取jedis对象
     * */
     public synchronized static Jedis getJedis(){

@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
  * 该方法会抛出IOExeption异常，此异常产生的原因是isr或br未能正常close
  */
 public class StringFromIsUtil {
-    /*
+    /**
     * 获取请求对象中传输的数据
     * @param is 输入流
     * @param charserName 指定读取数据的编码格式

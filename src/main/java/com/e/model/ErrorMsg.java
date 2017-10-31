@@ -2,6 +2,7 @@ package com.e.model;
 
 /**
  * Created by asus on 2017/10/12.
+ * 微信后台返回的错误信息对象
  */
 public class ErrorMsg {
     private String errcode;

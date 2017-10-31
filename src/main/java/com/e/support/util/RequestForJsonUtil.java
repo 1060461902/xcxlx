@@ -15,7 +15,7 @@ import java.io.IOException;
  * 请求指定url，返回响应数据字符串
  */
 public class RequestForJsonUtil {
-    /*
+    /**
     * 使用GET方法请求指定url并返回请求数据的字符串格式，失败将返回""
     * @param url 需要请求的url
     * @return string 返回的数据字符串

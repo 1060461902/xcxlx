@@ -1,14 +1,15 @@
 ###提前说明：
 测试用服务器ip：120.78.78.116
 ###数据库 表
-<h4>lx_address</h4> 存储用户地址信息 openid,user_name,phone,address<br/>
-user_name,phone,address为表的候选码
+<h4>lx_address</h4> 存储用户地址信息 openid,address_id,user_name,phone,address<br/>
+address_id,openid共同构成表的主键
 <h4></h4>
 ###调起登录
+在调起登录前应检查用户登录态是否有效,确认无效后再调用<br/>
 url:/wx/login.wx<br/>
 request method:post<br/>
 param:{code: res.code}<br/>
-return:unix下168位随机字符串，windows下170位随机字符串
+return:thirdsessionid unix下168位随机字符串，windows下170位随机字符串 
 ###用户添加地址
 url:/wx/address/add.wx<br/>
 request method:post<br/>
@@ -25,7 +26,7 @@ url:/wx/address/update.wx<br/>
 request method:post<br/>
 param:<br/>
 {<br/>
-"thirdsessionid":"test"//3rd_sessionID，如果用户登录，小程序中应该存有后端返回的3rd_sessionID<br/>
+"thirdsessionid":"test"//3rd_sessionID，调用登录后，后端返回的3rd_sessionID，应该保存在小程序中<br/>
 }<br/>
 return: <br/>
 [<br/>

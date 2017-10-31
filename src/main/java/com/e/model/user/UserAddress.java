@@ -2,13 +2,14 @@ package com.e.model.user;
 
 /**
  * Created by asus on 2017/10/29.
+ * 用户地址信息对象
  */
 public class UserAddress {
-    private String address_id;
-    private String openid;
-    private String user_name;
-    private String phone;
-    private String address;
+    private String address_id;//后台自动生成的30位随机字符串
+    private String openid;//用户的唯一标识
+    private String user_name;//姓名
+    private String phone;//电话
+    private String address;//地址
 
     public String getAddress_id() {
         return address_id;
