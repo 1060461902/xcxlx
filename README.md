@@ -47,8 +47,8 @@ param:<br/>
 "address":"中国"//用户地址<br/>
 "address_id":"NmcRiPRtS0aJIoGqa1quJW7NQZqLRs"//调用/add.wx时，后台自动生成的30位随机数，需重新传回后台<br/>
 }<br/>
-return: "true"成功添加，"false"添加失败
-###用户更新地址
+return: "true"成功更新，"false"更新失败
+###用户删除地址
 url:/wx/address/delete.wx<br/>
 request method:post<br/>
 param:<br/>
@@ -56,4 +56,4 @@ param:<br/>
 "thirdsessionid":"test",//3rd_sessionID，如果用户登录，小程序中应该存有用户的3rd_sessionID<br/>
 "address_id":"NmcRiPRtS0aJIoGqa1quJW7NQZqLRs"//调用/add.wx时，后台自动生成的30位随机数，需重新传回后台<br/>
 }<br/>
-return: "true"成功添加，"false"添加失败
+return: "true"成功删除，"false"删除失败
