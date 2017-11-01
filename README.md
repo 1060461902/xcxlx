@@ -58,3 +58,45 @@ param:<br/>
 "address_id":"NmcRiPRtS0aJIoGqa1quJW7NQZqLRs"//调用/add.wx时，后台自动生成的30位随机数，需重新传回后台<br/>
 }<br/>
 return: "true"成功删除，"false"删除失败
+###管理员添加，更新商品信息（单个，批量都适用）
+url:/wx/goods/addorupdate.wx<br/>
+request method:post<br/>
+param:<br/>
+[{<br/>
+"goods_id":"12983h13hasd",//货物ID<br/>
+"goods_img":null,//货物照片地址<br/>
+"goods_name":"1233123safasd",//货物名称<br/>
+"goods_num":131,//货物数量<br/>
+"goods_price":9000//货物价格 单位 分<br/>
+},<br/>
+{"goods_id":"13jffs3hasd",<br/>
+"goods_img":"123123saddvz1323/e123123",<br/>
+"goods_name":"123312312dasdd",<br/>
+"goods_num":0,<br/>
+"goods_price":9900<br/>
+}]如果要单个添加或单个更新，只要在json数组中放一个对象就行<br/>
+return: "true"操作成功，"false"操作失败
+###管理员删除货品信息（单个）
+url:/wx/goods/delete.wx<br/>
+request method:post<br/>
+param:<br/>
+{"goods_id":"12983h13hasd"} //商品ID<br/>
+return: "true"成功删除，"false"删除失败
+###前端获取所有货物信息
+url:/wx/goods/get.wx<br/>
+request method:post<br/>
+param:无
+return:<br/>
+[{<br/>
+"goods_id":"12983h13hasd",//货物ID<br/>
+"goods_img":null,//货物照片地址<br/>
+"goods_name":"1233123safasd",//货物名称<br/>
+"goods_num":131,//货物数量<br/>
+"goods_price":9000//货物价格 单位 分<br/>
+},<br/>
+{"goods_id":"13jffs3hasd",<br/>
+"goods_img":"123123saddvz1323/e123123",<br/>
+"goods_name":"123312312dasdd",<br/>
+"goods_num":0,<br/>
+"goods_price":9900<br/>
+}]

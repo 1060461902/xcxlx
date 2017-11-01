@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e.dao.mysql.goods.GoodsDao">
+    <!--  新增记录  -->
+    <insert id="addORUpdate" parameterType="java.util.List" keyProperty="goods_id">
+        INSERT INTO lx_goodsinfo (goods_id,goods_name,goods_price,goods_img,goods_num) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.goods_id},#{item.goods_name},#{item.goods_price},#{item.goods_img},#{item.goods_num})
+        </foreach>
+        ON DUPLICATE KEY UPDATE goods_name=VALUES (goods_name),goods_price=VALUES (goods_price),
+        goods_img=VALUES (goods_img),goods_num=VALUES (goods_num)
+    </insert>
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM lx_goodsinfo WHERE goods_id=#{goods_id}
+    </delete>
+    <select id="getAll" parameterType="java.lang.String" resultType="com.e.model.goods.Goods">
+        SELECT * FROM lx_goodsinfo
+    </select>
+    <update id="update" parameterType="com.e.model.goods.Goods">
+        UPDATE lx_goodsinfo
+        SET goods_name=#{goods_name},goods_price=#{goods_price},goods_img=#{goods_img},goods_num=#{goods_num}
+        WHERE goods_id=#{goods_id}
+    </update>
+</mapper>

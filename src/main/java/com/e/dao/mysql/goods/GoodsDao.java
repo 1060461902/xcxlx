@@ -1,6 +1,9 @@
 package com.e.dao.mysql.goods;
 
 import com.e.model.goods.Goods;
+import org.apache.ibatis.annotations.Param;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -8,22 +11,24 @@ import java.util.List;
  * Created by asus on 2017/10/31.
  * 后台货物管理Dao层
  */
+@Repository
+@MapperScan
 public interface GoodsDao {
     /**
-     * 添加货物信息（未确定是否批量）
+     * 添加、更新，货物信息,批量，单个都适用
      * @param
      * @return 是否添加成功
      * */
-    boolean add();
+    boolean addORUpdate(List<Goods>goodses);
     /**
      * 删除货物信息
-     * @param goods 货品信息对象
+     * @param goods_id 货品ID
     * @return 是否删除成功
      * */
-    boolean delete(Goods goods);
+    boolean delete(@Param("goods_id") String goods_id);
     /**
-     * 更新货物信息
-     * @param
+     * 单个更新货物信息
+     * @param goods 货物信息对象
      *@return 是否更新成功
      * */
     boolean update(Goods goods);
