@@ -71,6 +71,14 @@ public class GoodsService {
         request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         String goods_id = JSON.parseObject(json).getString("goods_id");
+        String road = dao.getRoad(goods_id);
+        File file = new File(road);
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists() && file.isFile()) {
+            if (!file.delete()) {
+                return false;
+            }
+        }
         return dao.delete(goods_id);
     }
     /**

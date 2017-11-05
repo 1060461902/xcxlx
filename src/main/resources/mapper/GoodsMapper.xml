@@ -21,4 +21,7 @@
         SET goods_name=#{goods_name},goods_price=#{goods_price},goods_img=#{goods_img},goods_num=#{goods_num}
         WHERE goods_id=#{goods_id}
     </update>
+    <select id="getRoad" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT goods_img FROM lx_goodsinfo WHERE goods_id = #{goods_id}
+    </select>
 </mapper>
