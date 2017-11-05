@@ -4,11 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.e.dao.mysql.goods.GoodsDao">
     <!--  新增记录  -->
-    <insert id="addORUpdate" parameterType="java.util.List" keyProperty="goods_id">
+    <insert id="addORUpdate" parameterType="com.e.model.goods.Goods" keyProperty="goods_id">
         INSERT INTO lx_goodsinfo (goods_id,goods_name,goods_price,goods_img,goods_num) VALUES
-        <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.goods_id},#{item.goods_name},#{item.goods_price},#{item.goods_img},#{item.goods_num})
-        </foreach>
+        (#{goods_id},#{goods_name},#{goods_price},#{goods_img},#{goods_num})
         ON DUPLICATE KEY UPDATE goods_name=VALUES (goods_name),goods_price=VALUES (goods_price),
         goods_img=VALUES (goods_img),goods_num=VALUES (goods_num)
     </insert>

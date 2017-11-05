@@ -143,6 +143,14 @@
             <version>0.0.3</version>
         </dependency>
 
+        <!--javamail，发送邮件-->
+        <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
         <!--测试-->
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>

@@ -1,11 +1,12 @@
 package com.e.controller.goods;
 
-import com.e.service.user.GoodsService;
+import com.e.service.goods.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -14,11 +15,11 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/goods")
-public class GoodsContorller {
+public class GoodsController {
     @Autowired
     GoodsService service;
     @RequestMapping(value = "/addorupdate.wx",method = RequestMethod.POST)
-    public String addORUpdate(HttpServletRequest request) throws IOException {
+    public String addORUpdate(HttpServletRequest request) throws IOException, ServletException {
         String iss = "false";
         if (service.addORUpdate(request)==true){
             iss = "true";

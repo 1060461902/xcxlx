@@ -19,7 +19,7 @@ public interface GoodsDao {
      * @param
      * @return 是否添加成功
      * */
-    boolean addORUpdate(List<Goods>goodses);
+    boolean addORUpdate(Goods goods);
     /**
      * 删除货物信息
      * @param goods_id 货品ID

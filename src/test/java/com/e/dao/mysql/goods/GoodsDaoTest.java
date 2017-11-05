@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -22,23 +19,15 @@ import static org.junit.Assert.assertTrue;
 public class GoodsDaoTest {
     @Autowired
     GoodsDao dao;
-    @Test
+    /*@Test
     public void addORUpdate() throws Exception {
-        List<Goods>list = new ArrayList<>();
         Goods goods = new Goods();
         goods.setGoods_id("12983h13hasd");
         goods.setGoods_name("1233123safasd");
         goods.setGoods_num(131);
         goods.setGoods_price(9000);
-        Goods goods2 = new Goods();
-        goods2.setGoods_id("13jffs3hasd");
-        goods2.setGoods_name("123312312dasdd");
-        goods2.setGoods_price(9900);
-        goods2.setGoods_img("123123saddvz1323/e123123");
-        list.add(goods);
-        list.add(goods2);
-        assertTrue(dao.addORUpdate(list));
-    }
+        assertTrue(dao.addORUpdate(goods));
+    }*/
 
     @Test
     public void delete() throws Exception {
