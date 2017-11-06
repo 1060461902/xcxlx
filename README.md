@@ -92,3 +92,7 @@ return:<br/>
 "goods_num":0,<br/>
 "goods_price":9900<br/>
 }]
+###微信支付以及订单接口未完成
+service.pay
+controller.pay
+未获取微信支付相关材料，weixin.properties未填补完整
