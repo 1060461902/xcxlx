@@ -46,7 +46,7 @@ public class WxPayController {
      * @throws Exception
      */
     @RequestMapping(value = "/pay",method = RequestMethod.POST)
-    public void pay(HttpServletResponse response) throws Exception {
+    public void pay(HttpServletResponse response,HttpServletRequest request) throws Exception {
         //TODO:这里执行商户系统创建新的订单操作
         WxPayOrder order = new WxPayOrder();
         order.setOut_trade_no(System.currentTimeMillis() + "");
@@ -61,7 +61,7 @@ public class WxPayController {
         data.put("total_fee", "1");
         data.put("spbill_create_ip", "192.168.0.119");
         data.put("notify_url", "notify_url");
-        data.put("trade_type", "NATIVE");  // 此处指定支付方式
+        data.put("trade_type", "JSAPI");  // 此处指定支付方式
         data.put("product_id", "12");
 
         try {

@@ -16,6 +16,7 @@ public class WxPayOrder {
     private String notify_url;//256 接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数。
     private String trade_type;//16 交易类型 小程序取值如下：JSAPI
     private String openid;//128 用户标识 trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。
+    //================================================================================================================
     private String device_info;//32 终端设备号(门店号或收银设备ID)，注意：PC网页或公众号内支付请传"WEB" 非必须
     private String sign_type;//32 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5 非必须
     private String detail;//6000 单品优惠字段(暂未上线) 非必须

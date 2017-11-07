@@ -3,7 +3,8 @@
 ###数据库 表
 <h4>lx_address</h4> 存储用户地址信息 openid,address_id,user_name,phone,address<br/>
 address_id,openid共同构成表的主键
-<h4></h4>
+<h4>lx_goodsinfo</h4>存储货物信息 goods_id 由后台系统自动生成的随机字符串,goods_name,goods_price 单位为分,goods_img 货品图片在后台的保存路径,goods_num<br/>
+goods_id为表的主键
 ###调起登录
 在调起登录前应检查用户登录态是否有效,确认无效后再调用<br/>
 url:/wx/login.wx<br/>
