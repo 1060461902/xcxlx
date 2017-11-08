@@ -20,28 +20,40 @@ public class AddressController {
     AddressService service;
     @RequestMapping(value = "/add.wx",method = RequestMethod.POST)
     public String addAddress(HttpServletRequest request) throws IOException {
-        String iss = "false";
-        if (service.add(request)==true){
-            iss = "true";
+        String ans = service.add(request);
+        if (ans.equals("lose")){
+            return "lose";
+        }else if (ans.equals("suc")){
+            return "true";
+        }else {
+            return "false";
         }
-        return iss;
     }
     @RequestMapping(value = "/delete.wx",method = RequestMethod.POST)
     public String deleteAddress(HttpServletRequest request) throws IOException {
-        String iss = "false";
-        if (service.delete(request)==true){
-            iss = "true";
+        String ans = service.delete(request);
+        if (ans.equals("lose")){
+            return "lose";
+        }else if (ans.equals("suc")){
+            return "true";
+        }else {
+            return "false";
         }
-        return iss;
     }
     @RequestMapping(value = "/update.wx",method = RequestMethod.POST)
     public String updateAddress(HttpServletRequest request) throws IOException {
-        String iss = "false";
-        if (service.update(request)==true){
-            iss = "true";
+        String ans = service.update(request);
+        if (ans.equals("lose")){
+            return "lose";
+        }else if (ans.equals("suc")){
+            return "true";
+        }else {
+            return "false";
         }
-        return iss;
     }
+    /**
+     * @return 返回地址信息json格式，如果为null则说明3rd_sessionID在后端失效
+     * */
     @RequestMapping(value = "/get.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     public String getAddresses(HttpServletRequest request) throws IOException {
         return service.get(request);

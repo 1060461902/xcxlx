@@ -8,6 +8,7 @@ import com.e.dao.redis.RedisDS;
 import com.e.model.user.UserAddress;
 import com.e.support.util.Create3rdSessionID;
 import com.e.support.util.StringFromIsUtil;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class AddressService {
     UserAddressDao dao;
     @Autowired
     RedisDS redisDS;
-    public boolean add(HttpServletRequest request) throws IOException {
+    public String add(HttpServletRequest request) throws IOException {
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         //获取前端传来的3rd_sessionID
@@ -37,8 +38,13 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回false
             if (!b2){
-                return false;
+                Logger logger = Logger.getLogger(AddressService.class);
+                logger.error("can't reset time:redis");
+                return "fail";
             }
+        }else {
+            //如果redis中3rd_sessionID失效,直接返回false
+            return "lose";
         }
         //获取openid
         String openid = sessionValue.split(",")[1];
@@ -53,9 +59,13 @@ public class AddressService {
         userAddress.setOpenid(openid);
         userAddress.setPhone(phone);
         userAddress.setAddress_id(address_id);
-        return dao.add(userAddress);
+        if (dao.add(userAddress)){
+            return "suc";
+        }else {
+            return "fail";
+        }
     }
-    public boolean delete(HttpServletRequest request) throws IOException {
+    public String delete(HttpServletRequest request) throws IOException {
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         //获取前端传来的3rd_sessionID
@@ -67,15 +77,23 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回false
             if (!b2){
-                return false;
+                Logger logger = Logger.getLogger(AddressService.class);
+                logger.error("can't reset time:redis");
+                return "fail";
             }
+        }else {
+            return "lose";
         }
         //获取openid
         String openid = sessionValue.split(",")[1];
         String address_id = jsonObject.getString("address_id");
-        return dao.delete(address_id,openid);
+        if (dao.delete(address_id,openid)){
+            return "suc";
+        }else {
+            return "fail";
+        }
     }
-    public boolean update(HttpServletRequest request) throws IOException {
+    public String update(HttpServletRequest request) throws IOException {
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         //获取前端传来的3rd_sessionID
@@ -87,8 +105,13 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回false
             if (!b2){
-                return false;
+                Logger logger = Logger.getLogger(AddressService.class);
+                logger.error("can't reset time:redis");
+                return "fail";
             }
+        }else {
+            //如果redis中3rd_sessionID失效,返回"lose"
+            return "lose";
         }
         //获取openid
         String openid = sessionValue.split(",")[1];
@@ -103,7 +126,11 @@ public class AddressService {
         userAddress.setOpenid(openid);
         userAddress.setPhone(phone);
         userAddress.setAddress_id(address_id);
-        return dao.update(userAddress);
+        if (dao.update(userAddress)){
+            return "suc";
+        }else {
+            return "fail";
+        }
     }
     public String get(HttpServletRequest request) throws IOException {
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
@@ -117,8 +144,12 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回空字符串
             if (!b2){
+                Logger logger = Logger.getLogger(AddressService.class);
+                logger.error("can't reset time:redis");
                 return "";
             }
+        }else {
+            return "lose";
         }
         //获取openid
         String openid = sessionValue.split(",")[1];
