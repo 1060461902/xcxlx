@@ -9,23 +9,23 @@ goods_id为表的主键
 在调起登录前应检查用户登录态是否有效,确认无效后再调用<br/>
 url:/wx/login.wx<br/>
 request method:post<br/>
-param:{code: res.code}<br/>
+param:json格式字符串：{code: res.code}<br/>
 return:字符串：thirdsessionid unix下168位随机字符串，windows下170位随机字符串 
 ###用户添加地址
 url:/wx/address/add.wx<br/>
 request method:post<br/>
-param:<br/>
+param:json格式字符串：<br/>
 {<br/>
 "thirdsessionid":"test",//3rd_sessionID，如果用户登录，小程序中应该存有用户的3rd_sessionID<br/>
 "user_name":"王五",//用户姓名<br/>
 "phone":"11122233355",//用户电话<br/>
-"address":"中国"//用户地址<br/>
+"address":"中国"//用户地址 不超过100个字符<br/>
 }<br/>
 return: 字符串："true"成功添加，"false"添加失败,"lose"后台3rd_sessionID失效，需要重新调起登录
 ###前端获取用户地址
 url:/wx/address/update.wx<br/>
 request method:post<br/>
-param:<br/>
+param:json格式字符串：<br/>
 {<br/>
 "thirdsessionid":"test"//3rd_sessionID，调用登录后，后端返回的3rd_sessionID，应该保存在小程序中<br/>
 }<br/>
@@ -43,19 +43,19 @@ return:json格式字符串 <br/>
 ###用户更新地址
 url:/wx/address/update.wx<br/>
 request method:post<br/>
-param:<br/>
+param:json格式字符串：<br/>
 {<br/>
 "thirdsessionid":"test",//3rd_sessionID，如果用户登录，小程序中应该存有用户的3rd_sessionID<br/>
 "user_name":"张三",//用户姓名<br/>
 "phone":"11122233355",//用户电话<br/>
-"address":"中国"//用户地址<br/>
+"address":"中国"//用户地址 不超过100个字符<br/>
 "address_id":"NmcRiPRtS0aJIoGqa1quJW7NQZqLRs"//调用/add.wx时，后台自动生成的30位随机数，需重新传回后台<br/>
 }<br/>
 return: 字符串："true"成功更新，"false"更新失败,"lose"后台3rd_sessionID失效，需要重新调起登录
 ###用户删除地址
 url:/wx/address/delete.wx<br/>
 request method:post<br/>
-param:<br/>
+param:json格式字符串：<br/>
 {<br/>
 "thirdsessionid":"test",//3rd_sessionID，如果用户登录，小程序中应该存有用户的3rd_sessionID<br/>
 "address_id":"NmcRiPRtS0aJIoGqa1quJW7NQZqLRs"//调用/add.wx时，后台自动生成的30位随机数，需重新传回后台<br/>
@@ -64,9 +64,9 @@ return: 字符串："true"成功删除，"false"删除失败,"lose"后台3rd_ses
 ###管理员添加，更新商品信息 单个
 url:/wx/goods/addorupdate.wx<br/>
 request method:post<br/>
-param:表单格式<br/>
-goods_id:货物ID<br/>
-goods_name:货物名称<br/>
+param:表单格式：<br/>
+goods_id:货物ID 不超过50个字符<br/>
+goods_name:货物名称 不超过50个字符<br/>
 goods_price:货物价格 单位 分<br/>
 goods_num:货物数量<br/>
 file:商品图片<br/>
@@ -74,7 +74,7 @@ return: 字符串："true"操作成功，"false"操作失败
 ###管理员删除货品信息（单个）
 url:/wx/goods/delete.wx<br/>
 request method:post<br/>
-param:<br/>
+param:json格式字符串：<br/>
 {"goods_id":"12983h13hasd"} //商品ID<br/>
 return: 字符串："true"成功删除，"false"删除失败
 ###前端获取所有货物信息
