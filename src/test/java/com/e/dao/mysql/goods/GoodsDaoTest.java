@@ -48,4 +48,10 @@ public class GoodsDaoTest {
         goods.setGoods_price(9000);
         assertTrue(dao.update(goods));
     }
+
+    @Test
+    public void getGoods(){
+        Goods goods = dao.getGoods("1231asdasdasd");
+        System.out.println(goods.getGoods_name());
+    }
 }

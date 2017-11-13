@@ -23,7 +23,7 @@ param:json格式字符串：<br/>
 }<br/>
 return: 字符串："true"成功添加，"false"添加失败,"lose"后台3rd_sessionID失效，需要重新调起登录
 ###前端获取用户地址
-url:/wx/address/update.wx<br/>
+url:/wx/address/get.wx<br/>
 request method:post<br/>
 param:json格式字符串：<br/>
 {<br/>

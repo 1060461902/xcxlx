@@ -24,4 +24,7 @@
     <select id="getRoad" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT goods_img FROM lx_goodsinfo WHERE goods_id = #{goods_id}
     </select>
+    <select id="getGoods" parameterType="java.lang.String" resultType="com.e.model.goods.Goods">
+        SELECT * FROM  lx_goodsinfo WHERE goods_id = #{goods_id}
+    </select>
 </mapper>

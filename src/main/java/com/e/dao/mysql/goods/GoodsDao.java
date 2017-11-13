@@ -43,4 +43,10 @@ public interface GoodsDao {
      * @return 货物图片在服务器中的路径
      * */
     String getRoad(@Param("goods_id") String goods_id);
+    /**
+     * 获取货物具体信息
+     * @param goods_id 货物ID
+     * @return 货物信息对象
+     * */
+    Goods getGoods(@Param("goods_id") String goods_id);
 }

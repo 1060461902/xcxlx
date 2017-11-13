@@ -8,7 +8,8 @@ import com.e.dao.redis.RedisDS;
 import com.e.model.user.UserAddress;
 import com.e.support.util.Create3rdSessionID;
 import com.e.support.util.StringFromIsUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回false
             if (!b2){
-                Logger logger = Logger.getLogger(AddressService.class);
+                Logger logger = LoggerFactory.getLogger(AddressService.class);
                 logger.error("can't reset time:redis");
                 return "fail";
             }
@@ -77,7 +78,7 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回false
             if (!b2){
-                Logger logger = Logger.getLogger(AddressService.class);
+                Logger logger = LoggerFactory.getLogger(AddressService.class);
                 logger.error("can't reset time:redis");
                 return "fail";
             }
@@ -105,7 +106,7 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回false
             if (!b2){
-                Logger logger = Logger.getLogger(AddressService.class);
+                Logger logger = LoggerFactory.getLogger(AddressService.class);
                 logger.error("can't reset time:redis");
                 return "fail";
             }
@@ -144,7 +145,7 @@ public class AddressService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接返回空字符串
             if (!b2){
-                Logger logger = Logger.getLogger(AddressService.class);
+                org.slf4j.Logger logger = LoggerFactory.getLogger(AddressService.class);
                 logger.error("can't reset time:redis");
                 return "";
             }

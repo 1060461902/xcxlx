@@ -53,8 +53,8 @@ public class WxPayController {
         wxPayService.createOrder(order);
 
         //设置请求参数
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("body", "微信支付测试");
+        Map<String, String> data = new HashMap<>();
+        data.put("body", "龙虾餐饮用户支付");
         data.put("out_trade_no", order.getOut_trade_no());
         data.put("device_info", "");
         data.put("fee_type", "CNY");
@@ -114,8 +114,7 @@ public class WxPayController {
 
             //设置成功确认内容
             resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-        }
-        else {  // 签名错误，如果数据里没有sign字段，也认为是签名错误
+        } else {  // 签名错误，如果数据里没有sign字段，也认为是签名错误
             //设置失败确认内容
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg></return_msg>" + "</xml> ";
             System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败");
@@ -133,7 +132,7 @@ public class WxPayController {
     @RequestMapping(value = "/refund",method = RequestMethod.POST)
     public void refund(String out_trade_no) throws Exception {
         //设置请求参数
-        HashMap<String, String> data = new HashMap<String, String>();
+        HashMap<String, String> data = new HashMap<>();
         data.put("out_trade_no", out_trade_no);
         data.put("out_refund_no", out_trade_no);
         data.put("total_fee", "1");
