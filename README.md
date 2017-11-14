@@ -65,10 +65,11 @@ return: 字符串："true"成功删除，"false"删除失败,"lose"后台3rd_ses
 url:/wx/goods/addorupdate.wx<br/>
 request method:post<br/>
 param:表单格式：<br/>
-goods_id:货物ID 不超过50个字符<br/>
+goods_id:货物ID 不超过50个字符 商家输入<br/>
 goods_name:货物名称 不超过50个字符<br/>
 goods_price:货物价格 单位 分<br/>
 goods_num:货物数量<br/>
+goods_weight:货物重量<br/>
 file:商品图片<br/>
 return: 字符串："true"操作成功，"false"操作失败
 ###管理员删除货品信息（单个）
@@ -88,13 +89,15 @@ return:json格式字符串：<br/>
 "goods_name":"1233123safasd",//货物名称<br/>
 "goods_num":131,//货物数量<br/>
 "goods_price":9000//货物价格 单位 分<br/>
+"goods_weight":1.2//货物重量 严格按照计价规则输入，并非实际重量 单位 千克 小数点一位<br/>
 },<br/>
 {"goods_id":"13jffs3hasd",<br/>
 "goods_img":"123123saddvz1323/e123123",<br/>
 "goods_name":"123312312dasdd",<br/>
 "goods_num":0,<br/>
 "goods_price":9900<br/>
-}]
+"goods_weight":1.2//货物重量 严格按照计价规则输入，并非实际重量 单位 千克 小数点一位<br/>}
+]
 ###微信支付以及订单接口未完成
 service.pay
 controller.pay

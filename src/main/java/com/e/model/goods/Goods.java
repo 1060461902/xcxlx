@@ -10,6 +10,15 @@ public class Goods {
     private int goods_price;//货物价格，单位 分
     private String goods_img;//货物图片地址
     private int goods_num;//货物数量
+    private double goods_weight;
+
+    public double getGoods_weight() {
+        return goods_weight;
+    }
+
+    public void setGoods_weight(double goods_weight) {
+        this.goods_weight = goods_weight;
+    }
 
     public int getGoods_num() {
         return goods_num;

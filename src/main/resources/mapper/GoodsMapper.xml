@@ -5,10 +5,10 @@
 <mapper namespace="com.e.dao.mysql.goods.GoodsDao">
     <!--  新增记录  -->
     <insert id="addORUpdate" parameterType="com.e.model.goods.Goods" keyProperty="goods_id">
-        INSERT INTO lx_goodsinfo (goods_id,goods_name,goods_price,goods_img,goods_num) VALUES
-        (#{goods_id},#{goods_name},#{goods_price},#{goods_img},#{goods_num})
+        INSERT INTO lx_goodsinfo (goods_id,goods_name,goods_price,goods_img,goods_num,goods_weight) VALUES
+        (#{goods_id},#{goods_name},#{goods_price},#{goods_img},#{goods_num},#{goods_weight})
         ON DUPLICATE KEY UPDATE goods_name=VALUES (goods_name),goods_price=VALUES (goods_price),
-        goods_img=VALUES (goods_img),goods_num=VALUES (goods_num)
+        goods_img=VALUES (goods_img),goods_num=VALUES (goods_num),goods_weight=VALUES (goods_weight)
     </insert>
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM lx_goodsinfo WHERE goods_id=#{goods_id}
@@ -18,7 +18,7 @@
     </select>
     <update id="update" parameterType="com.e.model.goods.Goods">
         UPDATE lx_goodsinfo
-        SET goods_name=#{goods_name},goods_price=#{goods_price},goods_img=#{goods_img},goods_num=#{goods_num}
+        SET goods_name=#{goods_name},goods_price=#{goods_price},goods_img=#{goods_img},goods_num=#{goods_num},goods_weight=#{goods_weight}
         WHERE goods_id=#{goods_id}
     </update>
     <select id="getRoad" parameterType="java.lang.String" resultType="java.lang.String">
