@@ -103,13 +103,14 @@ url:/wx/freight/addORUpdate.wx<br/>
 request method:post<br/>
 param:json格式字符串<br/>
 [
-      {"continue_weight":13.0,//续重 单位 千克 保留小数点一位<br/>
-      "first_weight":23.0,//初重 单位 千克 保留小数点一位<br/>
+      {"continue_weight":13.0,//续重 单位 元/千克 保留小数点一位<br/>
+      "first_weight":23.0,//初重 单位 元/千克 保留小数点一位<br/>
       "flow_place":"杭州,湖州,嘉兴,宁波,绍兴,台州,温州,衢州,丽水,金华,舟山",//流向地区<br/>
       "freight_id":"123",//计价规则ID 商家填写<br/>
-      "province":"浙江"},//省份<br/>
-      {"continue_weight":20.0,"first_weight":25.0,"flow_place":"呼伦贝尔,兴安盟","freight_id":"12asd","province":"内蒙古"},<br/>
-      {"continue_weight":20.0,"first_weight":25.0,"flow_place":"","freight_id":"1892371982","province":"黑龙江"}<br/>
+      "province":"浙江",//省份<br/>
+      "express_company_id":"SF"},//快递公司简写 由lx_express_company表维护<br/>
+      {"continue_weight":20.0,"express_company_id":"SF","first_weight":25.0,"flow_place":"呼伦贝尔,兴安盟","freight_id":"12asd","province":"内蒙古"},<br/>
+      {"continue_weight":20.0,"express_company_id":"SF","first_weight":25.0,"flow_place":"","freight_id":"1892371982","province":"黑龙江"}<br/>
   ]<br/>
 return: 字符串："true"成功，"false"失败
 ###前端获取所有运费计价规则
@@ -118,13 +119,14 @@ request method:post<br/>
 param:无<br/>
 return:json格式字符串<br/>
        [
-             {"continue_weight":13.0,//续重 单位 千克 保留小数点一位<br/>
-             "first_weight":23.0,//初重 单位 千克 保留小数点一位<br/>
+             {"continue_weight":13.0,//续重 单位 元/千克 保留小数点一位<br/>
+             "first_weight":23.0,//初重 单位 元/千克 保留小数点一位<br/>
              "flow_place":"杭州,湖州,嘉兴,宁波,绍兴,台州,温州,衢州,丽水,金华,舟山",//流向地区<br/>
              "freight_id":"123",//计价规则ID 商家填写<br/>
-             "province":"浙江"},//省份<br/>
-             {"continue_weight":20.0,"first_weight":25.0,"flow_place":"呼伦贝尔,兴安盟","freight_id":"12asd","province":"内蒙古"},<br/>
-             {"continue_weight":20.0,"first_weight":25.0,"flow_place":"","freight_id":"1892371982","province":"黑龙江"}<br/>
+             "province":"浙江",//省份<br/>
+             ,"express_company_id":"SF"},//快递公司简写 由lx_express_company表维护<br/>
+             {"continue_weight":20.0,"express_company_id":"SF"，"first_weight":25.0,"flow_place":"呼伦贝尔,兴安盟","freight_id":"12asd","province":"内蒙古"},<br/>
+             {"continue_weight":20.0,"express_company_id":"SF"，"first_weight":25.0,"flow_place":"","freight_id":"1892371982","province":"黑龙江"}<br/>
          ]<br/>
 ###删除运费计价规则
 url:/wx/freight/delete.wx<br/>
@@ -139,7 +141,9 @@ param:json字符串：<br/>
 "first_weight":25.0,<br/>
 "flow_place":"",<br/>
 "freight_id":"122",<br/>
-"province":"山东"}<br/>
+"province":"山东",<br/>
+"express_company_id":"SF"<br/>
+}<br/>
 return: 字符串："true"成功，"false"失败
 ###单个添加计价规则
 url:/wx/freight/insert.wx<br/>
@@ -149,7 +153,8 @@ param:json字符串：<br/>
 "first_weight":25.0,<br/>
 "flow_place":"",<br/>
 "freight_id":"122213",<br/>
-"province":"山东"}<br/>
+"province":"山东"，<br/>
+"express_company_id":"SF"}<br/>
 return: 字符串："true"成功，"false"失败
 ###微信支付以及订单接口未完成
 service.pay

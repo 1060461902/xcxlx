@@ -25,7 +25,7 @@ public class FreightDaoTest {
     FreightDao dao;
     @Test
     public void getFreight() throws Exception {
-        Freight freight = dao.getFreight("浙江","杭州");
+        Freight freight = dao.getFreight("浙江","杭州","SF");
         String firstweight = freight.getFirst_weight().toString();
         BigDecimal decimal = new BigDecimal(firstweight);
         decimal.setScale(1);
@@ -39,6 +39,7 @@ public class FreightDaoTest {
         freight.setProvince("黑龙江");
         freight.setFirst_weight(Double.valueOf(25));
         freight.setContinue_weight(Double.valueOf(20));
+        freight.setExpress_company_id("SF");
         assertTrue(dao.insert(freight));
     }
 
@@ -50,6 +51,7 @@ public class FreightDaoTest {
         freight.setFlow_place("杭州,湖州,嘉兴,宁波,绍兴,台州,温州,衢州,丽水,金华,舟山");
         freight.setFirst_weight(Double.valueOf(23));
         freight.setContinue_weight(Double.valueOf(13));
+        freight.setExpress_company_id("SF");
         assertTrue(dao.update(freight));
     }
 
@@ -62,6 +64,7 @@ public class FreightDaoTest {
         freight1.setFlow_place("杭州,湖州,嘉兴,宁波,绍兴,台州,温州,衢州,丽水,金华,舟山");
         freight1.setFirst_weight(Double.valueOf(23));
         freight1.setContinue_weight(Double.valueOf(13));
+        freight1.setExpress_company_id("SF");
         freights.add(freight1);
         Freight freight2 = new Freight();
         freight2.setFreight_id("12asd");
@@ -69,12 +72,13 @@ public class FreightDaoTest {
         freight2.setFlow_place("呼伦贝尔,兴安盟");
         freight2.setFirst_weight(Double.valueOf(25));
         freight2.setContinue_weight(Double.valueOf(20));
+        freight2.setExpress_company_id("SF");
         freights.add(freight2);
         assertTrue(dao.addORUpdate(freights));
     }
     @Test
     public void delete(){
-        assertTrue(dao.delete("asd"));
+        assertTrue(dao.delete("1892371982"));
     }
     @Test
     public void getAll(){

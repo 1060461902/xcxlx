@@ -6,30 +6,30 @@
     <select id="getFreight" resultType="com.e.model.pay.Freight">
         SELECT * FROM
         lx_freight
-        WHERE province=#{province} AND flow_place LIKE CONCAT(CONCAT('%',#{place}),'%')
+        WHERE province=#{province} AND express_company_id=#{express_company_id} AND flow_place LIKE CONCAT(CONCAT('%',#{place}),'%')
     </select>
     <insert id="insert" parameterType="com.e.model.pay.Freight">
         INSERT INTO lx_freight
-        (freight_id,province,flow_place,first_weight,continue_weight)
+        (freight_id,province,flow_place,first_weight,continue_weight,express_company_id)
         VALUES
-        (#{freight_id},#{province},#{flow_place},#{first_weight},#{continue_weight})
+        (#{freight_id},#{province},#{flow_place},#{first_weight},#{continue_weight},#{express_company_id})
     </insert>
     <update id="update" parameterType="com.e.model.pay.Freight">
         UPDATE lx_freight
         SET
-        province=#{province},flow_place=#{flow_place},first_weight=#{first_weight},continue_weight=#{continue_weight}
+        province=#{province},flow_place=#{flow_place},first_weight=#{first_weight},continue_weight=#{continue_weight},express_company_id=#{express_company_id}
         WHERE
         freight_id=#{freight_id}
     </update>
     <insert id="addORUpdate" parameterType="java.util.List" keyProperty="freight_id">
       INSERT INTO lx_freight
-      (freight_id,province,flow_place,first_weight,continue_weight)
+      (freight_id,province,flow_place,first_weight,continue_weight,express_company_id)
       VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.freight_id},#{item.province},#{item.flow_place},#{item.first_weight},#{item.continue_weight})
+            (#{item.freight_id},#{item.province},#{item.flow_place},#{item.first_weight},#{item.continue_weight},#{item.express_company_id})
         </foreach>
       ON DUPLICATE KEY UPDATE
-        province=VALUES(province),flow_place=VALUES(flow_place),first_weight=VALUES(first_weight),continue_weight=VALUES(continue_weight)
+        province=VALUES(province),flow_place=VALUES(flow_place),first_weight=VALUES(first_weight),continue_weight=VALUES(continue_weight),express_company_id=VALUES(express_company_id)
     </insert>
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM lx_freight

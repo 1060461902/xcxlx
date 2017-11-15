@@ -19,7 +19,7 @@ public interface FreightDao {
      * @param place 流向地区
      * @return 省份，地区相对应的运费计价规则对象
      * */
-    Freight getFreight(@Param("province")String procince,@Param("place")String place);
+    Freight getFreight(@Param("province")String procince,@Param("place")String place,@Param("express_company_id")String express_company_id);
     /**
      * 单个添加费计价规则
      * @param freight 运费计价规则对象
