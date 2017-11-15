@@ -69,7 +69,7 @@ goods_id:货物ID 不超过50个字符 商家输入<br/>
 goods_name:货物名称 不超过50个字符<br/>
 goods_price:货物价格 单位 分<br/>
 goods_num:货物数量<br/>
-goods_weight:货物重量<br/>
+goods_weight:货物重量 单位kg 保留小数点一位 严格按照计价规则填写<br/>
 file:商品图片<br/>
 return: 字符串："true"操作成功，"false"操作失败
 ###管理员删除货品信息（单个）
@@ -98,6 +98,59 @@ return:json格式字符串：<br/>
 "goods_price":9900<br/>
 "goods_weight":1.2//货物重量 严格按照计价规则输入，并非实际重量 单位 千克 小数点一位<br/>}
 ]
+###批量添加或修改运费计价规则
+url:/wx/freight/addORUpdate.wx<br/>
+request method:post<br/>
+param:json格式字符串<br/>
+[
+      {"continue_weight":13.0,//续重 单位 千克 保留小数点一位<br/>
+      "first_weight":23.0,//初重 单位 千克 保留小数点一位<br/>
+      "flow_place":"杭州,湖州,嘉兴,宁波,绍兴,台州,温州,衢州,丽水,金华,舟山",//流向地区<br/>
+      "freight_id":"123",//计价规则ID 商家填写<br/>
+      "province":"浙江"},//省份<br/>
+      {"continue_weight":20.0,"first_weight":25.0,"flow_place":"呼伦贝尔,兴安盟","freight_id":"12asd","province":"内蒙古"},<br/>
+      {"continue_weight":20.0,"first_weight":25.0,"flow_place":"","freight_id":"1892371982","province":"黑龙江"}<br/>
+  ]<br/>
+return: 字符串："true"成功，"false"失败
+###前端获取所有运费计价规则
+url:/wx/freight/getAll.wx<br/>
+request method:post<br/>
+param:无<br/>
+return:json格式字符串<br/>
+       [
+             {"continue_weight":13.0,//续重 单位 千克 保留小数点一位<br/>
+             "first_weight":23.0,//初重 单位 千克 保留小数点一位<br/>
+             "flow_place":"杭州,湖州,嘉兴,宁波,绍兴,台州,温州,衢州,丽水,金华,舟山",//流向地区<br/>
+             "freight_id":"123",//计价规则ID 商家填写<br/>
+             "province":"浙江"},//省份<br/>
+             {"continue_weight":20.0,"first_weight":25.0,"flow_place":"呼伦贝尔,兴安盟","freight_id":"12asd","province":"内蒙古"},<br/>
+             {"continue_weight":20.0,"first_weight":25.0,"flow_place":"","freight_id":"1892371982","province":"黑龙江"}<br/>
+         ]<br/>
+###删除运费计价规则
+url:/wx/freight/delete.wx<br/>
+request method:post<br/>
+param:json字符串：{"freight_id":"122"}<br/>
+return: 字符串："true"成功删除，"false"删除失败
+###单个更新计价规则
+url:/wx/freight/update.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{"continue_weight":20.0,<br/>
+"first_weight":25.0,<br/>
+"flow_place":"",<br/>
+"freight_id":"122",<br/>
+"province":"山东"}<br/>
+return: 字符串："true"成功，"false"失败
+###单个添加计价规则
+url:/wx/freight/insert.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{"continue_weight":20.0,<br/>
+"first_weight":25.0,<br/>
+"flow_place":"",<br/>
+"freight_id":"122213",<br/>
+"province":"山东"}<br/>
+return: 字符串："true"成功，"false"失败
 ###微信支付以及订单接口未完成
 service.pay
 controller.pay

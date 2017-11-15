@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e.dao.mysql.pay.FreightDao">
+    <select id="getFreight" resultType="com.e.model.pay.Freight">
+        SELECT * FROM
+        lx_freight
+        WHERE province=#{province} AND flow_place LIKE CONCAT(CONCAT('%',#{place}),'%')
+    </select>
+    <insert id="insert" parameterType="com.e.model.pay.Freight">
+        INSERT INTO lx_freight
+        (freight_id,province,flow_place,first_weight,continue_weight)
+        VALUES
+        (#{freight_id},#{province},#{flow_place},#{first_weight},#{continue_weight})
+    </insert>
+    <update id="update" parameterType="com.e.model.pay.Freight">
+        UPDATE lx_freight
+        SET
+        province=#{province},flow_place=#{flow_place},first_weight=#{first_weight},continue_weight=#{continue_weight}
+        WHERE
+        freight_id=#{freight_id}
+    </update>
+    <insert id="addORUpdate" parameterType="java.util.List" keyProperty="freight_id">
+      INSERT INTO lx_freight
+      (freight_id,province,flow_place,first_weight,continue_weight)
+      VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.freight_id},#{item.province},#{item.flow_place},#{item.first_weight},#{item.continue_weight})
+        </foreach>
+      ON DUPLICATE KEY UPDATE
+        province=VALUES(province),flow_place=VALUES(flow_place),first_weight=VALUES(first_weight),continue_weight=VALUES(continue_weight)
+    </insert>
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM lx_freight
+        WHERE freight_id=#{freight_id}
+    </delete>
+    <select id="getAll" resultType="com.e.model.pay.Freight">
+        SELECT * FROM lx_freight
+    </select>
+</mapper>

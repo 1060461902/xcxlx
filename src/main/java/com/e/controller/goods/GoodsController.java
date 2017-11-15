@@ -34,7 +34,7 @@ public class GoodsController {
         }
         return iss;
     }
-    @RequestMapping(value = "/get.wx",method = RequestMethod.POST)
+    @RequestMapping(value = "/get.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     public String get(HttpServletRequest request) throws IOException {
         return service.getAll(request);
     }

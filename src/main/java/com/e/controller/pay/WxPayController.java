@@ -151,4 +151,13 @@ public class WxPayController {
             e.printStackTrace();
         }
     }
+    /**
+     * 运费计算并提供给客户
+     *
+     * */
+    @RequestMapping(value = "freight.wx",method = RequestMethod.POST)
+    public String getFreight(HttpServletRequest request){
+
+        return "";
+    }
 }
