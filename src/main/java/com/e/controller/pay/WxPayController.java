@@ -127,7 +127,7 @@ public class WxPayController {
 
     /**
      * 微信申请退款接口
-     * @param out_trade_no        订单号
+     * @param out_trade_no 订单号
      * @throws Exception
      */
     @RequestMapping(value = "/refund",method = RequestMethod.POST)

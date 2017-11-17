@@ -41,6 +41,10 @@ public class WxPayServiceTest {
         System.out.println(service.getFreightPrice(address,"1231asdasdasd","SF"));
         String address1 = "黑龙江省贺州市";
         System.out.println(service.getFreightPrice(address1,"1231asdasdasd","SF"));
+        String address2 = "上海市闵行区";
+        System.out.println(service.getFreightPrice(address2,"1231asdasdasd","SF"));
+        String address3 = "内蒙古自治区呼伦贝尔市";
+        System.out.println(service.getFreightPrice(address3,"1231asdasdasd","SF"));
     }
 
 }

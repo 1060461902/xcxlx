@@ -46,7 +46,11 @@ public class WxPayService {
     }
     /**
      * 获取运费价格 单位 分
-     * @param address 地址字符串 要求 XX省XX市(市必须是地级市)
+     * @param address 地址字符串
+     *                要求
+     *                普通省：XX省XX市(市必须是地级市)
+     *                自治区：XX自治区XX市(市必须是地级市)
+     *                直辖市：xxx市
      * @param goods_id 货物ID
      * @param express_company_id 快递公司ID
      * @return 运费价格字符串格式 单位 分
@@ -54,8 +58,24 @@ public class WxPayService {
     public String getFreightPrice(String address,String goods_id,String express_company_id) throws IOException {
         int provinceIndex = address.indexOf("省");
         int cityIndex = address.indexOf("市");
-        String province = address.substring(0,provinceIndex);
-        String city = address.substring(provinceIndex+1,cityIndex);
+        String province;
+        String city;
+        if (provinceIndex>0){
+            //普通省
+            province = address.substring(0,provinceIndex);
+            city = address.substring(provinceIndex+1,cityIndex);
+        }else {
+            //自治区
+            provinceIndex = address.indexOf("自治区");
+            if (provinceIndex>0){
+                province = address.substring(0,provinceIndex);
+                city = address.substring(provinceIndex+3,cityIndex);
+            }else {
+                //直辖市
+                city = address.substring(0,cityIndex);
+                province =city;
+            }
+        }
         Freight freight = freightDao.getFreight(province,city,express_company_id);
         if(freight==null){
             freight = freightDao.getOtherFreight(province,express_company_id);
