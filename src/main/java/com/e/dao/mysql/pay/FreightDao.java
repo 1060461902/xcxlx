@@ -49,4 +49,8 @@ public interface FreightDao {
      * @return 运费计价规则列表
      * */
     List<Freight>getAll();
+    /**
+     *
+     * */
+    Freight getOtherFreight(@Param("province")String procince,@Param("express_company_id")String express_company_id);
 }

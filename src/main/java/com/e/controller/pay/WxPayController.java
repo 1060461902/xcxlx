@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -153,11 +154,10 @@ public class WxPayController {
     }
     /**
      * 运费计算并提供给客户
-     *
+     *@return 运费字符串 格式 分
      * */
-    @RequestMapping(value = "freight.wx",method = RequestMethod.POST)
-    public String getFreight(HttpServletRequest request){
-
-        return "";
+    @RequestMapping(value = "/freight.wx",method = RequestMethod.POST)
+    public String getFreight(HttpServletRequest request) throws IOException {
+        return wxPayService.returnFreightPrice(request);
     }
 }

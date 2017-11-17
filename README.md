@@ -1,5 +1,9 @@
 ###提前说明：
-测试用服务器ip：120.78.78.116
+测试用服务器ip：120.78.78.116<br/>
+用户地址格式必须是：XX省XX市(市必须是地级市)<br/>
+录入运费计价规则的时候 如果流向地区是空或者是其他 一律填写“其他”<br/>
+录入货物重量时 严格按照计价规则输入，并非实际重量 单位 千克 小数点一位<br/>
+获取调用获取运费接口时，返回的数值以分为单位<br/>
 ###数据库 表
 <h4>lx_address</h4> 存储用户地址信息 openid,address_id,user_name,phone,address<br/>
 address_id,openid共同构成表的主键
@@ -19,7 +23,7 @@ param:json格式字符串：<br/>
 "thirdsessionid":"test",//3rd_sessionID，如果用户登录，小程序中应该存有用户的3rd_sessionID<br/>
 "user_name":"王五",//用户姓名<br/>
 "phone":"11122233355",//用户电话<br/>
-"address":"中国"//用户地址 不超过100个字符<br/>
+"address":"中国"//用户地址 格式：XX省XX市(市必须是地级市) 不超过100个字符<br/>
 }<br/>
 return: 字符串："true"成功添加，"false"添加失败,"lose"后台3rd_sessionID失效，需要重新调起登录
 ###前端获取用户地址
@@ -156,6 +160,16 @@ param:json字符串：<br/>
 "province":"山东"，<br/>
 "express_company_id":"SF"}<br/>
 return: 字符串："true"成功，"false"失败
+###获取运费并显示给客户
+url:/wx/wxpay/freight.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+	"address":"浙江省杭州市江干区",//地址<br/>
+	"goods_id":"1231asdasdasd",//货物编号<br/>
+	"express_company_id":"SF",//快递公司ID SF：顺丰 目前只有顺丰<br/>
+}<br/>
+return:字符串："unknown":获取不到运费 "4250"（数字）:运费价格，单位 分
 ###微信支付以及订单接口未完成
 service.pay
 controller.pay

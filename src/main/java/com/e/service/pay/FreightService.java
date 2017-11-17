@@ -34,6 +34,7 @@ public class FreightService {
      * @return 是否删除成功
      * */
     public boolean delete(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         String freight_id = jsonObject.getString("freight_id");
@@ -44,6 +45,7 @@ public class FreightService {
      * @return 是否修改，添加成功
      * */
     public boolean addORUpdate(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         List<Freight>freights = JSON.parseArray(json,Freight.class);
         return dao.addORUpdate(freights);
@@ -53,6 +55,7 @@ public class FreightService {
      * @return 是否添加成功
      * */
     public boolean insert(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         Freight freight = JSON.parseObject(json,Freight.class);
         return dao.insert(freight);
@@ -62,6 +65,7 @@ public class FreightService {
      * @return 是否修改成功
      * */
     public boolean update(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         Freight freight = JSON.parseObject(json,Freight.class);
         return dao.update(freight);

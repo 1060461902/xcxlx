@@ -28,6 +28,7 @@ public class AddressService {
     @Autowired
     RedisDS redisDS;
     public String add(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         //获取前端传来的3rd_sessionID
@@ -67,6 +68,7 @@ public class AddressService {
         }
     }
     public String delete(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         //获取前端传来的3rd_sessionID
@@ -95,6 +97,7 @@ public class AddressService {
         }
     }
     public String update(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         //获取前端传来的3rd_sessionID
@@ -134,6 +137,7 @@ public class AddressService {
         }
     }
     public String get(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         //获取前端传来的3rd_sessionID

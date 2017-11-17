@@ -8,6 +8,11 @@
         lx_freight
         WHERE province=#{province} AND express_company_id=#{express_company_id} AND flow_place LIKE CONCAT(CONCAT('%',#{place}),'%')
     </select>
+    <select id="getOtherFreight" resultType="com.e.model.pay.Freight">
+        SELECT * FROM
+        lx_freight
+        WHERE province=#{province} AND express_company_id=#{express_company_id} AND flow_place = '其他'
+    </select>
     <insert id="insert" parameterType="com.e.model.pay.Freight">
         INSERT INTO lx_freight
         (freight_id,province,flow_place,first_weight,continue_weight,express_company_id)
