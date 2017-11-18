@@ -1,112 +1,108 @@
 package com.e.model.pay;
 
+import java.sql.Timestamp;
+
+/**
+ * Created by asus on 2017/11/18.
+ */
 public class Order {
-  private String order_id;
-  private int goods_number;
-  private int goods_price;
-  private java.sql.Timestamp order_time;
-  private int order_status;
-  private String user_add_message;
-  private String order_wx_id;
-  private String goods_id;
-  private String user_address;
-  private String user_phone;
-  private String user_name;
-  private int freight;
+    private String order_id;//商户订单号 openid前5位+时间戳
+    private String order_wx_id;//微信订单号
+    private String openid;//用户唯一标识
+    private String goods_id;//货物ID *
+    private int goods_number;//购买的货物数量 *
+    private int freight;//运费价格
+    private java.sql.Timestamp order_time;//交易时间
+    private int order_status;//订单状态 0交易中(支付未成功) 1交易完成（商家处理阶段） 2订单处理完成（完成订单） 3退单
+    private String user_add_message;//用户备注信息 *
+    private String address_id;//用户地址ID *
+    private String express_company_id;//快递公司ID *
 
-  public int getGoods_number() {
-    return goods_number;
-  }
+    public String getOrder_id() {
+        return order_id;
+    }
 
-  public void setGoods_number(int goods_number) {
-    this.goods_number = goods_number;
-  }
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
+    }
 
-  public int getGoods_price() {
-    return goods_price;
-  }
+    public String getOrder_wx_id() {
+        return order_wx_id;
+    }
 
-  public void setGoods_price(int goods_price) {
-    this.goods_price = goods_price;
-  }
+    public void setOrder_wx_id(String order_wx_id) {
+        this.order_wx_id = order_wx_id;
+    }
 
-  public int getOrder_status() {
-    return order_status;
-  }
+    public String getOpenid() {
+        return openid;
+    }
 
-  public void setOrder_status(int order_status) {
-    this.order_status = order_status;
-  }
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
-  public int getFreight() {
-    return freight;
-  }
+    public String getGoods_id() {
+        return goods_id;
+    }
 
-  public void setFreight(int freight) {
-    this.freight = freight;
-  }
+    public void setGoods_id(String goods_id) {
+        this.goods_id = goods_id;
+    }
 
-  public String getOrder_id() {
-    return order_id;
-  }
+    public int getGoods_number() {
+        return goods_number;
+    }
 
-  public void setOrder_id(String order_id) {
-    this.order_id = order_id;
-  }
+    public void setGoods_number(int goods_number) {
+        this.goods_number = goods_number;
+    }
 
-  public java.sql.Timestamp getOrder_time() {
-    return order_time;
-  }
+    public int getFreight() {
+        return freight;
+    }
 
-  public void setOrder_time(java.sql.Timestamp order_time) {
-    this.order_time = order_time;
-  }
+    public void setFreight(int freight) {
+        this.freight = freight;
+    }
 
-  public String getUser_add_message() {
-    return user_add_message;
-  }
+    public Timestamp getOrder_time() {
+        return order_time;
+    }
 
-  public void setUser_add_message(String user_add_message) {
-    this.user_add_message = user_add_message;
-  }
+    public void setOrder_time(Timestamp order_time) {
+        this.order_time = order_time;
+    }
 
-  public String getOrder_wx_id() {
-    return order_wx_id;
-  }
+    public int getOrder_status() {
+        return order_status;
+    }
 
-  public void setOrder_wx_id(String order_wx_id) {
-    this.order_wx_id = order_wx_id;
-  }
+    public void setOrder_status(int order_status) {
+        this.order_status = order_status;
+    }
 
-  public String getGoods_id() {
-    return goods_id;
-  }
+    public String getUser_add_message() {
+        return user_add_message;
+    }
 
-  public void setGoods_id(String goods_id) {
-    this.goods_id = goods_id;
-  }
+    public void setUser_add_message(String user_add_message) {
+        this.user_add_message = user_add_message;
+    }
 
-  public String getUser_address() {
-    return user_address;
-  }
+    public String getAddress_id() {
+        return address_id;
+    }
 
-  public void setUser_address(String user_address) {
-    this.user_address = user_address;
-  }
+    public void setAddress_id(String address_id) {
+        this.address_id = address_id;
+    }
 
-  public String getUser_phone() {
-    return user_phone;
-  }
+    public String getExpress_company_id() {
+        return express_company_id;
+    }
 
-  public void setUser_phone(String user_phone) {
-    this.user_phone = user_phone;
-  }
-
-  public String getUser_name() {
-    return user_name;
-  }
-
-  public void setUser_name(String user_name) {
-    this.user_name = user_name;
-  }
+    public void setExpress_company_id(String express_company_id) {
+        this.express_company_id = express_company_id;
+    }
 }

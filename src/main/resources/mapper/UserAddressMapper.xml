@@ -16,4 +16,7 @@
     <select id="get" parameterType="java.lang.String" resultType="com.e.model.user.UserAddress">
         SELECT * FROM lx_address WHERE openid=#{openid}
     </select>
+    <select id="getTheAddress" parameterType="java.lang.String" resultType="com.e.model.user.UserAddress">
+        SELECT * FROM lx_address WHERE openid=#{openid} AND address_id=#{address_id}
+    </select>
 </mapper>

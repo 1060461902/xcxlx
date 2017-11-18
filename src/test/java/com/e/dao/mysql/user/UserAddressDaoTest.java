@@ -54,4 +54,9 @@ public class UserAddressDaoTest {
         System.out.println(list.get(0).getAddress_id());
     }
 
+    @Test
+    public void getTheAddress(){
+        UserAddress address = dao.getTheAddress("6f8E1UyHtVV9454doLnm9xnsNkp4KB","12381dasdh1231");
+        System.out.println(address.getAddress());
+    }
 }

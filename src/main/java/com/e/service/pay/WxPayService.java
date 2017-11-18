@@ -4,16 +4,26 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.e.dao.mysql.goods.GoodsDao;
 import com.e.dao.mysql.pay.FreightDao;
+import com.e.dao.mysql.pay.OrderDao;
+import com.e.dao.mysql.user.UserAddressDao;
+import com.e.dao.redis.RedisDS;
 import com.e.model.goods.Goods;
 import com.e.model.pay.Freight;
+import com.e.model.pay.Order;
 import com.e.model.pay.WxPayOrder;
+import com.e.model.user.UserAddress;
+import com.e.service.user.AddressService;
 import com.e.support.util.StringFromIsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 /**
  * Created by asus on 2017/11/6.
@@ -24,7 +34,79 @@ public class WxPayService {
     FreightDao freightDao;
     @Autowired
     GoodsDao goodsDao;
-    public void createOrder(WxPayOrder order) {
+    @Autowired
+    OrderDao orderDao;
+    @Autowired
+    UserAddressDao userAddressDao;
+    @Autowired
+    RedisDS redisDS;
+    /**
+     * 需要前端传的参数：thirdsessionid,goods_id,goods_number,user_add_message,address_id,express_company_id
+     * @return 订单信息对象 order.openid "lake"缺货 "lose"3rd_session失效
+     * */
+    @Transactional
+    public Order createOrder(HttpServletRequest request) throws Exception {
+        Order order = new Order();
+        //设置订单状态为 0 正在支付(未支付成功)
+        order.setOrder_status(0);
+        order.setOrder_time(new Timestamp(new java.util.Date().getTime()));
+        request.setCharacterEncoding("UTF-8");
+        String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
+        JSONObject jsonObject = JSON.parseObject(json);
+        //获取3rd_sessionID
+        String thirdSessionID = jsonObject.getString("thirdsessionid");
+        //获取货物ID
+        String goods_id = jsonObject.getString("goods_id");
+        order.setGoods_id(goods_id);
+        //根据货物ID获取货物信息
+        Goods goods = goodsDao.getGoods(goods_id);
+        if (goods==null){
+            throw new Exception("can't get GoodsInfo");
+        }
+        //获取购买的货物数量
+        String goods_number = jsonObject.getString("goods_number");
+        order.setGoods_number(Integer.parseInt(goods_number));
+        if (goods.getGoods_num()<Integer.parseInt(goods_number)){
+            //如果缺货，返回openid为"lake"的订单对象
+            order.setOpenid("lake");
+            return order;
+        }
+        //获取用户附加信息
+        String user_add_message = jsonObject.getString("user_add_message");
+        order.setUser_add_message(user_add_message);
+        //获取地址ID
+        String address_id = jsonObject.getString("address_id");
+        order.setAddress_id(address_id);
+        String express_company_id = jsonObject.getString("express_company_id");
+        order.setExpress_company_id(express_company_id);
+        //获取在redis中存储的用户信息
+        String sessionValue = redisDS.getByKey(thirdSessionID);
+        if (sessionValue!=null&&!sessionValue.equals("")){
+            //重置过期时间30天
+            boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
+            //如果重置不成功直接抛异常
+            if (!b2){
+                Logger logger = LoggerFactory.getLogger(AddressService.class);
+                logger.error("can't reset time:redis");
+                throw new Exception("can't reset time:redis");
+            }
+        }else {
+            //如果redis中3rd_sessionID失效,返回openid为lose的Order对象
+            order.setOpenid("lose");
+            return order;
+        }
+        //获取openid
+        String openid = sessionValue.split(",")[1];
+        order.setOpenid(openid);
+        //拼接商户订单号
+        order.setOrder_id(openid.substring(0,5)+System.currentTimeMillis());
+        UserAddress userAddress = userAddressDao.getTheAddress(address_id,openid);
+        if (userAddress==null){
+            throw new Exception("can't get address");
+        }
+        String freightPrice = getFreightPrice(userAddress.getAddress(),goods_id,express_company_id);
+        order.setFreight(Integer.parseInt(freightPrice));
+        return order;
     }
 
     public WxPayOrder getOrder(String out_trade_no) {
@@ -32,8 +114,7 @@ public class WxPayService {
     }
 
     /**
-     *
-     *
+     *@return 返回运费 单位 分
      * */
     public String returnFreightPrice(HttpServletRequest request) throws IOException {
         request.setCharacterEncoding("UTF-8");

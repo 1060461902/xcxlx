@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e.dao.mysql.pay.OrderDao">
+    <insert id="insert" parameterType="com.e.model.pay.Order">
+        INSERT INTO lx_order
+        (order_id,order_wx_id,openid,goods_id,goods_number,freight,order_time,order_status,user_add_message,address_id,express_company_id)
+        VALUES
+        (#{order_id},#{order_wx_id},#{openid},#{goods_id},#{goods_number},#{freight},#{order_time},#{order_status},#{user_add_message},#{address_id},#{express_company_id})
+    </insert>
+    <select id="getOnePersonAll" parameterType="java.lang.String" resultType="com.e.model.pay.Order">
+        SELECT * FROM lx_order
+        WHERE
+        openid=#{openid}
+    </select>
+    <select id="getTheStatusAll" resultType="com.e.model.pay.Order">
+        SELECT * FROM lx_order
+        WHERE
+        status=#{status}
+    </select>
+    <select id="getOnePersonTheStatusAll" resultType="com.e.model.pay.Order">
+        SELECT * FROM lx_order
+        WHERE
+        openid=#{openid} AND status=#{status}
+    </select>
+    <update id="updateTheOrder">
+        UPDATE lx_order
+        SET status=#{status}
+        WHERE order_id=#{order_id}
+    </update>
+    <select id="getAll" resultType="com.e.model.pay.Order">
+        SELECT * FROM lx_order
+    </select>
+</mapper>

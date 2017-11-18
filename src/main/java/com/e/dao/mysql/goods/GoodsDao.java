@@ -49,4 +49,7 @@ public interface GoodsDao {
      * @return 货物信息对象
      * */
     Goods getGoods(@Param("goods_id") String goods_id);
+    /**
+     *
+     * */
 }

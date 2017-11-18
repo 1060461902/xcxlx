@@ -1,8 +1,10 @@
 package com.e.controller.pay;
 
-import com.e.model.pay.WxPayOrder;
-import com.e.service.pay.WxPayService;
 import com.e.model.pay.MyWxPayConfig;
+import com.e.model.pay.Order;
+import com.e.model.pay.WxPayOrder;
+import com.e.service.pay.ShowOrderService;
+import com.e.service.pay.WxPayService;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class WxPayController {
     private WXPay wxpay;
     @Autowired
     private WxPayService wxPayService;
+    @Autowired
+    private ShowOrderService showOrderService;
 
     public WxPayController() {
         try {
@@ -49,14 +53,12 @@ public class WxPayController {
     @RequestMapping(value = "/pay",method = RequestMethod.POST)
     public void pay(HttpServletResponse response,HttpServletRequest request) throws Exception {
         //TODO:这里执行商户系统创建新的订单操作
-        WxPayOrder order = new WxPayOrder();
-        order.setOut_trade_no(System.currentTimeMillis() + "");
-        wxPayService.createOrder(order);
+        Order order = wxPayService.createOrder(request);
 
         //设置请求参数
         Map<String, String> data = new HashMap<>();
         data.put("body", "龙虾餐饮用户支付");
-        data.put("out_trade_no", order.getOut_trade_no());
+        data.put("out_trade_no", order.getOrder_id());
         data.put("device_info", "");
         data.put("fee_type", "CNY");
         data.put("total_fee", "1");
@@ -156,8 +158,33 @@ public class WxPayController {
      * 运费计算并提供给客户
      *@return 运费字符串 格式 分
      * */
-    @RequestMapping(value = "/freight.wx",method = RequestMethod.POST)
+    @RequestMapping(value = "/freight.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     public String getFreight(HttpServletRequest request) throws IOException {
         return wxPayService.returnFreightPrice(request);
+    }
+    /**
+     * @param request 只需要thirdsessionid
+     * @return "fail"重置失败 "lose"3rd_sessionID失效 正常：json格式字符串
+     * */
+    @RequestMapping(value = "/getonepersonall.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    public String  getOnePersonAll(HttpServletRequest request) throws IOException {
+        return showOrderService.getOnePersonAll(request);
+    }
+    /**
+     * @param request 只需要order_status
+     * @return json格式字符串
+     * */
+    @RequestMapping(value = "/getthestatusall.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    public String getTheStatusAll(HttpServletRequest request) throws IOException {
+        return showOrderService.getTheStatusAll(request);
+    }
+    /**
+     * 获取某人某状态的订单
+     * @param request 需要 thirdsessionid,order_status
+     * @return "fail"重置失败 "lose"3rd_sessionID失效 正常：json格式字符串
+     * */
+    @RequestMapping(value = "/getonepersonthestatusall.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    public String getOnePersonTheStatusAll(HttpServletRequest request) throws IOException {
+        return showOrderService.getOnePersonTheStatusAll(request);
     }
 }

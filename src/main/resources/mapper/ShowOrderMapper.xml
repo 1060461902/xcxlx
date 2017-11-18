@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e.dao.mysql.pay.ShowOrderDao">
+    <select id="getOnePersonAll" parameterType="java.lang.String" resultType="com.e.model.pay.ShowOrder">
+        SELECT
+        order_id,order_wx_id,lo.goods_id,lo.goods_number,goods_price,goods_name,goods_img,freight,order_time,order_status,user_add_message,address,phone,user_name
+        FROM lx_order AS lo,lx_address AS la,lx_goodsinfo AS lg
+        WHERE
+        lo.openid = la.openid AND lo.goods_id = lg.goods_id AND lo.address_id = la.address_id AND
+        lo.openid=#{openid}
+    </select>
+    <select id="getTheStatusAll" resultType="com.e.model.pay.ShowOrder">
+        SELECT
+        order_id,order_wx_id,lo.goods_id,lo.goods_number,goods_price,goods_name,goods_img,freight,order_time,order_status,user_add_message,address,phone,user_name
+        FROM lx_order AS lo,lx_address AS la,lx_goodsinfo AS lg
+        WHERE
+        lo.openid = la.openid AND lo.goods_id = lg.goods_id AND lo.address_id = la.address_id AND
+        order_status=#{order_status}
+    </select>
+    <select id="getOnePersonTheStatusAll" resultType="com.e.model.pay.ShowOrder">
+        SELECT
+        order_id,order_wx_id,lo.goods_id,lo.goods_number,goods_price,goods_name,goods_img,freight,order_time,order_status,user_add_message,address,phone,user_name
+        FROM lx_order AS lo,lx_address AS la,lx_goodsinfo AS lg
+        WHERE
+        lo.openid = la.openid AND lo.goods_id = lg.goods_id AND lo.address_id = la.address_id AND
+        lo.openid=#{openid} AND order_status=#{order_status}
+    </select>
+    <select id="getAll" resultType="com.e.model.pay.ShowOrder">
+        SELECT
+        order_id,order_wx_id,lo.goods_id,lo.goods_number,goods_price,goods_name,goods_img,freight,order_time,order_status,user_add_message,address,phone,user_name
+        FROM lx_order AS lo,lx_address AS la,lx_goodsinfo AS lg
+        WHERE
+        lo.openid = la.openid AND lo.goods_id = lg.goods_id AND lo.address_id = la.address_id
+    </select>
+</mapper>

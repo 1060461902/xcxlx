@@ -19,5 +19,4 @@ public class LoginServiceTest {
     public void login() throws Exception {
         System.out.println(service);
     }
-
 }

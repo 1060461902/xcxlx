@@ -39,4 +39,11 @@ public interface UserAddressDao {
      * @return 用户地址信息对象列表
      * */
     List<UserAddress> get(@Param("openid") String openid);
+    /**
+     * 根据address_id和openid获取某用户的地址信息
+     * @param address_id 地址ID
+     * @param openid 用户唯一标识
+     * @return 地址信息对象
+     * */
+    UserAddress getTheAddress(@Param("address_id")String address_id,@Param("openid")String openid);
 }

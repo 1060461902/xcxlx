@@ -176,6 +176,81 @@ param:json字符串：<br/>
 	"express_company_id":"SF",//快递公司ID SF：顺丰 目前只有顺丰<br/>
 }<br/>
 return:字符串："unknown":获取不到运费 "4250"（数字）:运费价格，单位 分
+###获取某人某状态的订单
+url:/wx/wxpay/getonepersonthestatusall.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+	"thirdsessionid":"test",<br/>
+	"order_status":0 //订单状态<br/>
+}<br/>
+return:字符串："fail"重置失败 "lose"3rd_sessionID失效 
+   正常：json格式字符串<br/>
+   [<br/>
+   {"address":"中国",//地址<br/>
+   "freight":1200,//运费价格<br/>
+   "goods_id":"1231asdasdasd",//货物ID<br/>
+   "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
+   "goods_name":"沙发上",//货物名<br/>
+   "goods_number":2,//购买数量<br/>
+   "goods_price":1200,//货物价格 单位 分<br/>
+   "order_id":"akslud",//订单编号 后台生成<br/>
+   "order_status":0,//订单状态 0未支付成功 1支付成功 2订单完成<br/>
+   "order_time":1510987445000,//订单时间戳<br/>
+   "order_wx_id":"12312",//微信订单号<br/>
+   "phone":"11122233355",//用户电话号码<br/>
+   "user_add_message":"啊实打实",//用户备注<br/>
+   "user_name":"王五"}//用户姓名<br/>
+   ]
+###商家获取某状态的订单
+url:/wx/wxpay/getthestatusall.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+	"order_status":0 //订单状态<br/>
+}<br/>
+return：json格式字符串：<br/>
+[<br/>
+   {"address":"中国",//地址<br/>
+   "freight":1200,//运费价格<br/>
+   "goods_id":"1231asdasdasd",//货物ID<br/>
+   "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
+   "goods_name":"沙发上",//货物名<br/>
+   "goods_number":2,//购买数量<br/>
+   "goods_price":1200,//货物价格 单位 分<br/>
+   "order_id":"akslud",//订单编号 后台生成<br/>
+   "order_status":0,//订单状态 0未支付成功 1支付成功 2订单完成<br/>
+   "order_time":1510987445000,//订单时间戳<br/>
+   "order_wx_id":"12312",//微信订单号<br/>
+   "phone":"11122233355",//用户电话号码<br/>
+   "user_add_message":"啊实打实",//用户备注<br/>
+   "user_name":"王五"}//用户姓名<br/>
+   ]
+###获取某人的所有订单
+url:/wx/wxpay/getonepersonall.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+	"thirdsessionid":"test",<br/>
+}<br/>
+return:字符串："fail"重置失败 "lose"3rd_sessionID失效 
+   正常：json格式字符串<br/>
+   [<br/>
+   {"address":"中国",//地址<br/>
+   "freight":1200,//运费价格<br/>
+   "goods_id":"1231asdasdasd",//货物ID<br/>
+   "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
+   "goods_name":"沙发上",//货物名<br/>
+   "goods_number":2,//购买数量<br/>
+   "goods_price":1200,//货物价格 单位 分<br/>
+   "order_id":"akslud",//订单编号 后台生成<br/>
+   "order_status":0,//订单状态 0未支付成功 1支付成功 2订单完成<br/>
+   "order_time":1510987445000,//订单时间戳<br/>
+   "order_wx_id":"12312",//微信订单号<br/>
+   "phone":"11122233355",//用户电话号码<br/>
+   "user_add_message":"啊实打实",//用户备注<br/>
+   "user_name":"王五"}//用户姓名<br/>
+   ]
 ###微信支付以及订单接口未完成
 service.pay
 controller.pay
