@@ -32,19 +32,19 @@ public class WxPayServiceTest {
         Freight freight = new Freight();
         freight.setFirst_weight(Double.valueOf(5));
         freight.setContinue_weight(Double.valueOf(1));
-        System.out.println(service.calculation(10.5,freight,1).multiply(new BigDecimal("100")).setScale(0));
+        System.out.println(service.calculation(10.7,freight,1).multiply(new BigDecimal("100")).setScale(0));
     }
 
     @Test
     public void getFrightPrice()throws Exception{
         String address = "浙江省杭州市江干区";
-        System.out.println(service.getFreightPrice(address,"1231asdasdasd","SF"));
+        System.out.println(service.getFreightPrice(address,"1231asdasdasd","SF",3));
         String address1 = "黑龙江省贺州市";
-        System.out.println(service.getFreightPrice(address1,"1231asdasdasd","SF"));
+        System.out.println(service.getFreightPrice(address1,"1231asdasdasd","SF",3));
         String address2 = "上海市闵行区";
-        System.out.println(service.getFreightPrice(address2,"1231asdasdasd","SF"));
+        System.out.println(service.getFreightPrice(address2,"1231asdasdasd","SF",3));
         String address3 = "内蒙古自治区呼伦贝尔市";
-        System.out.println(service.getFreightPrice(address3,"1231asdasdasd","SF"));
+        System.out.println(service.getFreightPrice(address3,"1231asdasdasd","SF",3));
     }
 
 }

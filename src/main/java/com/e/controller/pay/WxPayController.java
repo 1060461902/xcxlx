@@ -2,7 +2,7 @@ package com.e.controller.pay;
 
 import com.e.model.pay.MyWxPayConfig;
 import com.e.model.pay.Order;
-import com.e.model.pay.WxPayOrder;
+import com.e.model.pay.ShowOrder;
 import com.e.service.pay.ShowOrderService;
 import com.e.service.pay.WxPayService;
 import com.github.wxpay.sdk.WXPay;
@@ -51,17 +51,31 @@ public class WxPayController {
      * @throws Exception
      */
     @RequestMapping(value = "/pay",method = RequestMethod.POST)
-    public void pay(HttpServletResponse response,HttpServletRequest request) throws Exception {
+    public String pay(HttpServletResponse response,HttpServletRequest request) throws Exception {
         //TODO:这里执行商户系统创建新的订单操作
         Order order = wxPayService.createOrder(request);
-
+        if (order==null){
+            //建立订单失败
+            return "fail";
+        }else if (order.getOpenid().equals("lake")){
+            //缺货
+            return "lake";
+        }else if (order.getOpenid().equals("lose")){
+            //3rd_sessionid失效
+            return "lose";
+        }
+        ShowOrder showOrder = wxPayService.getShowOrder(order.getOrder_id());
+        if (showOrder==null){
+            //获取订单失败
+            return "fail";
+        }
         //设置请求参数
         Map<String, String> data = new HashMap<>();
         data.put("body", "龙虾餐饮用户支付");
-        data.put("out_trade_no", order.getOrder_id());
+        data.put("out_trade_no", showOrder.getOrder_id());
         data.put("device_info", "");
         data.put("fee_type", "CNY");
-        data.put("total_fee", "1");
+        data.put("total_fee", String.valueOf(showOrder.getFreight()));
         data.put("spbill_create_ip", "192.168.0.119");
         data.put("notify_url", "notify_url");
         data.put("trade_type", "JSAPI");  // 此处指定支付方式
@@ -70,9 +84,11 @@ public class WxPayController {
         try {
             //发起支付
             Map<String, String> resp = wxpay.unifiedOrder(data);
+            return "true";
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "false";
     }
 
     /**
@@ -104,10 +120,11 @@ public class WxPayController {
         String resXml = "";
         //验证签名
         if (wxpay.isPayResultNotifySignatureValid(notifyMap)) {        // 签名正确
-            WxPayOrder order = wxPayService.getOrder(notifyMap.get("out_trade_no"));
+            ShowOrder order = wxPayService.getShowOrder(notifyMap.get("out_trade_no"));
             if(order != null) {
                 if("SUCCESS".equals(notifyMap.get("result_code"))) {    //交易成功
                     // TODO:更新订单
+
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付成功");
                 } else {    //交易失败
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败");
@@ -148,6 +165,7 @@ public class WxPayController {
             Map<String, String> result = wxpay.refund(data);
             if("SUCCESS".equals(result.get("result_code"))) {
                 //TODO:更新订单
+
                 System.out.println("订单" + out_trade_no + "微信退款成功");
             }
         } catch (Exception e) {

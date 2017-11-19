@@ -4,6 +4,7 @@ package com.e.model.pay;
  * Created by asus on 2017/11/6.
  * https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1
  */
+@Deprecated
 public class WxPayOrder {
     private String appid;//32 微信分配的小程序ID
     private String mch_id;//32 微信支付分配的商户号

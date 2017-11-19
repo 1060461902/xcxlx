@@ -5,7 +5,7 @@
                     直辖市：xxx市<br/>
 录入运费计价规则的时候 如果流向地区是空或者是其他 一律填写“其他”<br/>
 如果在录入运费计价规则碰到直辖市 省和地区都填直辖市名<br/>
-录入货物重量时 严格按照计价规则输入，并非实际重量 单位 千克 小数点一位<br/>
+录入货物重量时 单位 千克 小数点一位<br/>
 获取调用获取运费接口时，返回的数值以分为单位<br/>
 ###数据库 表
 <h4>lx_address</h4> 存储用户地址信息 openid,address_id,user_name,phone,address<br/>
@@ -79,7 +79,7 @@ goods_id:货物ID 不超过50个字符 商家输入<br/>
 goods_name:货物名称 不超过50个字符<br/>
 goods_price:货物价格 单位 分<br/>
 goods_num:货物数量<br/>
-goods_weight:货物重量 单位kg 保留小数点一位 严格按照计价规则填写<br/>
+goods_weight:货物重量 单位kg 保留小数点一位<br/>
 file:商品图片<br/>
 return: 字符串："true"操作成功，"false"操作失败
 ###管理员删除货品信息（单个）
@@ -99,7 +99,7 @@ return:json格式字符串：<br/>
 "goods_name":"1233123safasd",//货物名称<br/>
 "goods_num":131,//货物数量<br/>
 "goods_price":9000//货物价格 单位 分<br/>
-"goods_weight":1.2//货物重量 严格按照计价规则输入，并非实际重量 单位 千克 小数点一位<br/>
+"goods_weight":1.2//货物重量 单位 千克 小数点一位<br/>
 },<br/>
 {"goods_id":"13jffs3hasd",<br/>
 "goods_img":"123123saddvz1323/e123123",<br/>
@@ -174,6 +174,7 @@ param:json字符串：<br/>
 	"address":"浙江省杭州市江干区",//地址<br/>
 	"goods_id":"1231asdasdasd",//货物编号<br/>
 	"express_company_id":"SF",//快递公司ID SF：顺丰 目前只有顺丰<br/>
+	"goods_number";3//订货数量
 }<br/>
 return:字符串："unknown":获取不到运费 "4250"（数字）:运费价格，单位 分
 ###获取某人某状态的订单

@@ -5,12 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.e.dao.mysql.goods.GoodsDao;
 import com.e.dao.mysql.pay.FreightDao;
 import com.e.dao.mysql.pay.OrderDao;
+import com.e.dao.mysql.pay.ShowOrderDao;
 import com.e.dao.mysql.user.UserAddressDao;
 import com.e.dao.redis.RedisDS;
 import com.e.model.goods.Goods;
 import com.e.model.pay.Freight;
 import com.e.model.pay.Order;
-import com.e.model.pay.WxPayOrder;
+import com.e.model.pay.ShowOrder;
 import com.e.model.user.UserAddress;
 import com.e.service.user.AddressService;
 import com.e.support.util.StringFromIsUtil;
@@ -36,6 +37,8 @@ public class WxPayService {
     GoodsDao goodsDao;
     @Autowired
     OrderDao orderDao;
+    @Autowired
+    ShowOrderDao showOrderDao;
     @Autowired
     UserAddressDao userAddressDao;
     @Autowired
@@ -64,9 +67,8 @@ public class WxPayService {
             throw new Exception("can't get GoodsInfo");
         }
         //获取购买的货物数量
-        String goods_number = jsonObject.getString("goods_number");
-        order.setGoods_number(Integer.parseInt(goods_number));
-        if (goods.getGoods_num()<Integer.parseInt(goods_number)){
+        int goods_number = jsonObject.getInteger("goods_number");
+        if (goods.getGoods_num()<goods_number){
             //如果缺货，返回openid为"lake"的订单对象
             order.setOpenid("lake");
             return order;
@@ -104,13 +106,16 @@ public class WxPayService {
         if (userAddress==null){
             throw new Exception("can't get address");
         }
-        String freightPrice = getFreightPrice(userAddress.getAddress(),goods_id,express_company_id);
+        String freightPrice = getFreightPrice(userAddress.getAddress(),goods_id,express_company_id,goods_number);
         order.setFreight(Integer.parseInt(freightPrice));
+        if (!orderDao.insert(order)){
+            return null;
+        }
         return order;
     }
 
-    public WxPayOrder getOrder(String out_trade_no) {
-        return null;
+    public ShowOrder getShowOrder(String order_id) {
+         return showOrderDao.getTheShowOrder(order_id);
     }
 
     /**
@@ -123,7 +128,8 @@ public class WxPayService {
         String address = jsonObject.getString("address");
         String goods_id = jsonObject.getString("goods_id");
         String express_company_id = jsonObject.getString("express_company_id");
-        return getFreightPrice(address,goods_id,express_company_id);
+        int goods_number = jsonObject.getInteger("goods_number");
+        return getFreightPrice(address,goods_id,express_company_id,goods_number);
     }
     /**
      * 获取运费价格 单位 分
@@ -134,9 +140,10 @@ public class WxPayService {
      *                直辖市：xxx市
      * @param goods_id 货物ID
      * @param express_company_id 快递公司ID
+     * @param goods_number 货物数量
      * @return 运费价格字符串格式 单位 分
      * */
-    public String getFreightPrice(String address,String goods_id,String express_company_id) throws IOException {
+    public String getFreightPrice(String address,String goods_id,String express_company_id,int goods_number) throws IOException {
         int provinceIndex = address.indexOf("省");
         int cityIndex = address.indexOf("市");
         String province;
@@ -165,7 +172,7 @@ public class WxPayService {
             }
         }
         Goods goods = goodsDao.getGoods(goods_id);
-        BigDecimal decimal = calculation(goods.getGoods_weight(),freight,1);
+        BigDecimal decimal = calculation(goods.getGoods_weight()*goods_number,freight,1);
         return decimal.multiply(new BigDecimal("100")).setScale(0).toString();
     }
     /**
@@ -177,17 +184,26 @@ public class WxPayService {
      * */
     public BigDecimal calculation(double weight, Freight freight,double firestWeight){
         BigDecimal rd;//需要返回的rd
-        if (weight<=firestWeight){ //小于1kg按首重
+        if (weight<=firestWeight){ //小于首重按首重价格
             rd = new BigDecimal(freight.getFirst_weight().toString());
         }else {
             BigDecimal firestWeightPrice = new BigDecimal(freight.getFirst_weight().toString());//首重价格
             firestWeightPrice.setScale(1);//保留一位小数
             BigDecimal continueWeightPrice = new BigDecimal(freight.getContinue_weight().toString());//续重价格
             continueWeightPrice.setScale(1);//保留一位小数
-            weight = weight - firestWeight;//扣除首重后的重量
+            weight = weight - firestWeight;//扣除首重后的真实重量
             String s = Double.toString(weight);
-            BigDecimal wgt = new BigDecimal(s);
-            wgt.setScale(1);//重量保留一位小数
+            BigDecimal wgt = new BigDecimal(s);//续重真实重量
+            wgt.setScale(1,BigDecimal.ROUND_HALF_UP);//续重真实重量保留一位小数
+            int zs = (int)weight;
+            BigDecimal zsbd = new BigDecimal(zs);
+            BigDecimal xsbd = wgt.subtract(zsbd);
+            BigDecimal half = new BigDecimal("0.5");
+            if (xsbd.compareTo(half)<=0){
+                wgt = zsbd.add(half);
+            }else {
+                wgt = zsbd.add(half).add(half);
+            }
             BigDecimal continuprice = wgt.multiply(continueWeightPrice); //续重所需费用
             rd = continuprice.add(firestWeightPrice);
         }

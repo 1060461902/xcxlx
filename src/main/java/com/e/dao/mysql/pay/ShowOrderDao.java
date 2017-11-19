@@ -2,12 +2,14 @@ package com.e.dao.mysql.pay;
 
 import com.e.model.pay.ShowOrder;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by asus on 2017/11/18.
  */
+@Repository
 public interface ShowOrderDao {
     /**
      * 获取所有订单
@@ -33,4 +35,10 @@ public interface ShowOrderDao {
      * @return 订单列表
      * */
     List<ShowOrder>getOnePersonTheStatusAll(@Param("order_status")int order_status, @Param("openid") String openid);
+    /**
+     * 通过订单号获取某个订单的具体信息
+     * @param order_id 订单号
+     * @return 展示型订单信息对象
+     * */
+    ShowOrder getTheShowOrder(@Param("order_id")String order_id);
 }
