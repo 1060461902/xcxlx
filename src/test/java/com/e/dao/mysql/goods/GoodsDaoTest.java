@@ -54,4 +54,9 @@ public class GoodsDaoTest {
         Goods goods = dao.getGoods("1231asdasdasd");
         System.out.println(goods.getGoods_name());
     }
+
+    @Test
+    public void updateNum(){
+        assertTrue(dao.updateNum("1231asdasdasd",1));
+    }
 }

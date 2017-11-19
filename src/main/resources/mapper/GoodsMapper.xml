@@ -27,4 +27,10 @@
     <select id="getGoods" parameterType="java.lang.String" resultType="com.e.model.goods.Goods">
         SELECT * FROM  lx_goodsinfo WHERE goods_id = #{goods_id}
     </select>
+    <update id="updateNum">
+        UPDATE lx_goodsinfo
+        SET goods_num=goods_num-#{delNum}
+        WHERE
+        goods_id=#{goods_id}
+    </update>
 </mapper>

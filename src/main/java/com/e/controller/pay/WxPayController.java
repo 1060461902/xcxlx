@@ -50,7 +50,7 @@ public class WxPayController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/pay",method = RequestMethod.POST)
+    @RequestMapping(value = "/pay.wx",method = RequestMethod.POST)
     public String pay(HttpServletResponse response,HttpServletRequest request) throws Exception {
         //TODO:这里执行商户系统创建新的订单操作
         Order order = wxPayService.createOrder(request);
@@ -71,15 +71,14 @@ public class WxPayController {
         }
         //设置请求参数
         Map<String, String> data = new HashMap<>();
-        data.put("body", "龙虾餐饮用户支付");
-        data.put("out_trade_no", showOrder.getOrder_id());
-        data.put("device_info", "");
-        data.put("fee_type", "CNY");
-        data.put("total_fee", String.valueOf(showOrder.getFreight()));
-        data.put("spbill_create_ip", "192.168.0.119");
-        data.put("notify_url", "notify_url");
-        data.put("trade_type", "JSAPI");  // 此处指定支付方式
-        data.put("product_id", "12");
+        data.put("body", showOrder.getGoods_name()+"-用户支付");//商品描述
+        data.put("out_trade_no", showOrder.getOrder_id());//商户订单号
+        data.put("fee_type", "CNY");//货币类型 CNY人民币
+        data.put("total_fee", String.valueOf(showOrder.getFreight()+showOrder.getGoods_price()*showOrder.getGoods_number()));
+        data.put("spbill_create_ip", request.getRemoteAddr());//用户端ip地址
+        //TODO:需要修改回调地址
+        data.put("notify_url", "120.78.78.116/wx/wxpay/notify_url.wx");//回调接口地址
+        data.put("trade_type", "JSAPI");  // 此处指定支付方式 小程序指定为 JSAPI
 
         try {
             //发起支付
@@ -96,7 +95,7 @@ public class WxPayController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/notify_url",method = RequestMethod.POST)
+    @RequestMapping(value = "/notify_url.wx",method = RequestMethod.POST)
     public void notifyUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 读取回调内容
         InputStream inputStream;
@@ -124,7 +123,7 @@ public class WxPayController {
             if(order != null) {
                 if("SUCCESS".equals(notifyMap.get("result_code"))) {    //交易成功
                     // TODO:更新订单
-
+                    wxPayService.updateOrder(notifyMap.get("out_trade_no"),1);//将订单状态设置为交易成功
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付成功");
                 } else {    //交易失败
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败");
@@ -149,7 +148,7 @@ public class WxPayController {
      * @param out_trade_no 订单号
      * @throws Exception
      */
-    @RequestMapping(value = "/refund",method = RequestMethod.POST)
+    @RequestMapping(value = "/refund.wx",method = RequestMethod.POST)
     public void refund(String out_trade_no) throws Exception {
         //设置请求参数
         HashMap<String, String> data = new HashMap<>();

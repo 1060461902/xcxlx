@@ -108,14 +108,25 @@ public class WxPayService {
         }
         String freightPrice = getFreightPrice(userAddress.getAddress(),goods_id,express_company_id,goods_number);
         order.setFreight(Integer.parseInt(freightPrice));
+        //创建订单
         if (!orderDao.insert(order)){
-            return null;
+            throw new Exception("can't create order");
+        }
+        //更新货物信息，减少货物总量
+        synchronized (this){//加锁
+            if (!goodsDao.updateNum(goods_id, goods_number)) {
+                throw new Exception("can't  subtract goods_num");
+            }
         }
         return order;
     }
 
     public ShowOrder getShowOrder(String order_id) {
          return showOrderDao.getTheShowOrder(order_id);
+    }
+
+    public boolean updateOrder(String order_id,int status){
+        return orderDao.updateTheOrder(order_id,status);
     }
 
     /**

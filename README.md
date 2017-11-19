@@ -252,7 +252,5 @@ return:字符串："fail"重置失败 "lose"3rd_sessionID失效
    "user_add_message":"啊实打实",//用户备注<br/>
    "user_name":"王五"}//用户姓名<br/>
    ]
-###微信支付以及订单接口未完成
-service.pay
-controller.pay
+###微信支付以及订单接口基本逻辑完成，但是没有相关材料无法测试
 未获取微信支付相关材料，weixin.properties未填补完整
