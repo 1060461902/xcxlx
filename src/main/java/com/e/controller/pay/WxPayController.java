@@ -7,6 +7,8 @@ import com.e.service.pay.ShowOrderService;
 import com.e.service.pay.WxPayService;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -135,6 +137,8 @@ public class WxPayController {
                     //设置失败确认内容
                     resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg></return_msg>" + "</xml> ";
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败");
+                    Logger logger = LoggerFactory.getLogger(WxPayController.class);
+                    logger.error("交易未成功");
                     //发送通知
                     response.getWriter().println(resXml);
                 }
@@ -143,9 +147,11 @@ public class WxPayController {
 
 
         } else {  // 签名错误，如果数据里没有sign字段，也认为是签名错误
+            wxPayService.updateOrder(notifyMap.get("out_trade_no"),5);//将订单状态设置为交易失败
             //设置失败确认内容
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg></return_msg>" + "</xml> ";
-            System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败 签名错误");
+            Logger logger = LoggerFactory.getLogger(WxPayController.class);
+            logger.error("交易未成功 签名错误");
             //发送通知
             response.getWriter().println(resXml);
         }
