@@ -27,9 +27,9 @@ param:json格式字符串：<br/>
 "thirdsessionid":"test",//3rd_sessionID，如果用户登录，小程序中应该存有用户的3rd_sessionID<br/>
 "user_name":"王五",//用户姓名<br/>
 "phone":"11122233355",//用户电话<br/>
-"address":"中国"//用户地址 格式：普通省：XX省XX市(市必须是地级市)<br/>
-                                 自治区：XX自治区XX市(市必须是地级市)<br/>
-                                 直辖市：xxx市<br/>
+"address":"中国"//用户地址 格式：普通省：XX省XX市(市必须是地级市) 
+                                 自治区：XX自治区XX市(市必须是地级市) 
+                                 直辖市：xxx市
                                  不超过100个字符<br/>
 }<br/>
 return: 字符串："true"成功添加，"false"添加失败,"lose"后台3rd_sessionID失效，需要重新调起登录
