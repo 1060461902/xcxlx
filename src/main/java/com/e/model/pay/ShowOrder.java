@@ -18,6 +18,15 @@ public class ShowOrder {
   private String address;//用户地址
   private String phone;//用户联系号码
   private String user_name;//用户姓名
+  private String express_company_id;//订单指定的快递公司ID
+
+  public String getExpress_company_id() {
+    return express_company_id;
+  }
+
+  public void setExpress_company_id(String express_company_id) {
+    this.express_company_id = express_company_id;
+  }
 
   public String getGoods_name() {
     return goods_name;

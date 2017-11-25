@@ -17,16 +17,16 @@
     <select id="getTheStatusAll" resultType="com.e.model.pay.Order">
         SELECT * FROM lx_order
         WHERE
-        status=#{status}
+        order_status=#{status}
     </select>
     <select id="getOnePersonTheStatusAll" resultType="com.e.model.pay.Order">
         SELECT * FROM lx_order
         WHERE
-        openid=#{openid} AND status=#{status}
+        openid=#{openid} AND order_status=#{status}
     </select>
     <update id="updateTheOrder">
         UPDATE lx_order
-        SET status=#{status}
+        SET order_status=#{status}
         WHERE order_id=#{order_id}
     </update>
     <select id="getAll" resultType="com.e.model.pay.Order">

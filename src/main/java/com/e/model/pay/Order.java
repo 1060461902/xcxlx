@@ -13,7 +13,7 @@ public class Order {
     private int goods_number;//购买的货物数量 *
     private int freight;//运费价格
     private java.sql.Timestamp order_time;//交易时间
-    private int order_status;//订单状态 0交易中(支付未成功) 1交易完成（商家处理阶段） 2订单处理完成（完成订单） 3退单
+    private int order_status;//订单状态 0交易中(支付未成功) 1交易完成（商家处理阶段） 2订单处理完成（完成订单） 3退单 4交易失败的订单
     private String user_add_message;//用户备注信息 *
     private String address_id;//用户地址ID *
     private String express_company_id;//快递公司ID *

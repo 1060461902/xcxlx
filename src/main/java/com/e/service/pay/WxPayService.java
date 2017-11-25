@@ -113,10 +113,8 @@ public class WxPayService {
             throw new Exception("can't create order");
         }
         //更新货物信息，减少货物总量
-        synchronized (this){//加锁
-            if (!goodsDao.updateNum(goods_id, goods_number)) {
-                throw new Exception("can't  subtract goods_num");
-            }
+        if (!goodsDao.updateNum(goods_id, goods_number)) {
+            throw new Exception("can't  subtract goods_num");
         }
         return order;
     }

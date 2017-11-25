@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.e.dao.mysql.pay.ShowOrderDao;
 import com.e.dao.redis.RedisDS;
 import com.e.model.pay.ShowOrder;
+import com.e.service.mail.MailService;
 import com.e.service.user.AddressService;
 import com.e.support.util.StringFromIsUtil;
 import org.slf4j.Logger;
@@ -12,8 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,7 +30,12 @@ public class ShowOrderService {
     ShowOrderDao showOrderDao;
     @Autowired
     RedisDS redisDS;
+    @Autowired
+    MailService mailService;
 
+    /**
+     * 获取所有订单
+     * */
     public String getAll(){
         List<ShowOrder>showOrderList = showOrderDao.getAll();
         return JSON.toJSONString(showOrderList);
@@ -101,5 +111,34 @@ public class ShowOrderService {
         //获取openid
         String openid = sessionValue.split(",")[1];
         return JSON.toJSONString(showOrderDao.getOnePersonTheStatusAll(order_status,openid));
+    }
+    /**
+     * 获取某个展示型订单对象
+     * @param order_id 订单号
+     * @return 展示型订单对象
+     * */
+    public ShowOrder getTheOrder(String order_id){
+        return showOrderDao.getTheShowOrder(order_id);
+    }
+    /**
+     * 根据对象发送订单邮件
+     * */
+    public <T>void sendObjectEmail(T t,Class<T> cls) throws MessagingException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String dt = format.format(date);
+        Field[] fields = cls.getDeclaredFields();
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<html><body>");
+        for(Field field:fields){
+            field.setAccessible(true);
+            try {
+                buffer.append("<p>"+field.getName()+" : "+field.get(t));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        buffer.append("</body></html>");
+        mailService.send("xlxhost@126.com","订单"+dt,buffer.toString());
     }
 }

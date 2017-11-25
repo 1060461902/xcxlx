@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
  * Created by asus on 2017/11/5.
  */
 @Service
-public class MailUtil {
+public class MailService {
     /*@Autowired
     private MailSender mailSender;*/
     @Autowired

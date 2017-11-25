@@ -1,5 +1,6 @@
-package com.e.service.mail;
+package com.e.service.pay;
 
+import com.e.model.pay.ShowOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,16 +8,17 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Created by asus on 2017/11/5.
+ * Created by asus on 2017/11/24.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/config.xml"})
-public class MailUtilTest {
+public class ShowOrderServiceTest {
     @Autowired
-    MailService mailService;
+    ShowOrderService showOrderService;
     @Test
-    public void send() throws Exception {
-        mailService.send("xlxhost@126.com","test12","<html><body><h1>test</h1></body></html>");
+    public void sendObjectEmail() throws Exception {
+        ShowOrder showOrder = showOrderService.getTheOrder("akslud");
+        showOrderService.sendObjectEmail(showOrder,ShowOrder.class);
     }
 
 }

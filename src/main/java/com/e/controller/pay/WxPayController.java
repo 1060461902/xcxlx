@@ -108,13 +108,10 @@ public class WxPayController {
         }
         in.close();
         inputStream.close();
-
         // 支付结果通知的xml格式数据
         String notifyData = sb.toString();
-
         // 转换成map
         Map<String, String> notifyMap = WXPayUtil.xmlToMap(notifyData);
-
         //支付确认内容
         String resXml = "";
         //验证签名
@@ -124,23 +121,34 @@ public class WxPayController {
                 if("SUCCESS".equals(notifyMap.get("result_code"))) {    //交易成功
                     // TODO:更新订单
                     wxPayService.updateOrder(notifyMap.get("out_trade_no"),1);//将订单状态设置为交易成功
+                    //速度过慢，时间过长
+                    /*//TODO:发送邮件通知商家
+                    ShowOrder showOrder = showOrderService.getTheOrder(notifyMap.get("out_trade_no"));
+                    showOrderService.sendObjectEmail(showOrder,ShowOrder.class);*/
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付成功");
+                    //设置成功确认内容
+                    resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    //发送通知
+                    response.getWriter().println(resXml);
                 } else {    //交易失败
+                    wxPayService.updateOrder(notifyMap.get("out_trade_no"),4);//将订单状态设置为交易失败
+                    //设置失败确认内容
+                    resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg></return_msg>" + "</xml> ";
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败");
+                    //发送通知
+                    response.getWriter().println(resXml);
                 }
             }
             // 注意特殊情况：订单已经退款，但收到了支付结果成功的通知，不应把商户侧订单状态从退款改成支付成功
 
-            //设置成功确认内容
-            resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+
         } else {  // 签名错误，如果数据里没有sign字段，也认为是签名错误
             //设置失败确认内容
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg></return_msg>" + "</xml> ";
-            System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败");
+            System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败 签名错误");
+            //发送通知
+            response.getWriter().println(resXml);
         }
-
-        //发送通知
-        response.getWriter().println(resXml);
     }
 
     /**

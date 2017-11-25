@@ -189,6 +189,7 @@ return:字符串："fail"重置失败 "lose"3rd_sessionID失效
    正常：json格式字符串<br/>
    [<br/>
    {"address":"中国",//地址<br/>
+   "express_company_id":"SF",//快递公司ID<br/>
    "freight":1200,//运费价格<br/>
    "goods_id":"1231asdasdasd",//货物ID<br/>
    "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
@@ -213,6 +214,7 @@ param:json字符串：<br/>
 return：json格式字符串：<br/>
 [<br/>
    {"address":"中国",//地址<br/>
+   "express_company_id":"SF",//快递公司ID<br/>
    "freight":1200,//运费价格<br/>
    "goods_id":"1231asdasdasd",//货物ID<br/>
    "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
@@ -227,6 +229,15 @@ return：json格式字符串：<br/>
    "user_add_message":"啊实打实",//用户备注<br/>
    "user_name":"王五"}//用户姓名<br/>
    ]
+###商家更新某个订单的状态
+url:<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+	"order_id":"akslud",<br/>
+	"order_status":1<br/>
+}<br/>
+return: 字符串："true"成功，"false"失败
 ###获取某人的所有订单
 url:/wx/wxpay/getonepersonall.wx<br/>
 request method:post<br/>
@@ -238,6 +249,29 @@ return:字符串："fail"重置失败 "lose"3rd_sessionID失效
    正常：json格式字符串<br/>
    [<br/>
    {"address":"中国",//地址<br/>
+   "express_company_id":"SF",//快递公司ID<br/>
+   "freight":1200,//运费价格<br/>
+   "goods_id":"1231asdasdasd",//货物ID<br/>
+   "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
+   "goods_name":"沙发上",//货物名<br/>
+   "goods_number":2,//购买数量<br/>
+   "goods_price":1200,//货物价格 单位 分<br/>
+   "order_id":"akslud",//订单编号 后台生成<br/>
+   "order_status":0,//订单状态 0未支付成功 1支付成功 2订单完成<br/>
+   "order_time":1510987445000,//订单时间戳<br/>
+   "order_wx_id":"12312",//微信订单号<br/>
+   "phone":"11122233355",//用户电话号码<br/>
+   "user_add_message":"啊实打实",//用户备注<br/>
+   "user_name":"王五"}//用户姓名<br/>
+   ]
+###商家获取所有订单
+url:/wx/order/get.wx<br/>
+request method:post<br/>
+param:无<br/>
+return:json格式字符串<br/>
+   [<br/>
+   {"address":"中国",//地址<br/>
+   "express_company_id":"SF",//快递公司ID<br/>
    "freight":1200,//运费价格<br/>
    "goods_id":"1231asdasdasd",//货物ID<br/>
    "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
