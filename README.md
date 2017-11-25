@@ -287,5 +287,12 @@ return:json格式字符串<br/>
    "user_add_message":"啊实打实",//用户备注<br/>
    "user_name":"王五"}//用户姓名<br/>
    ]
-###微信支付以及订单接口基本逻辑完成，但是没有相关材料无法测试
-未获取微信支付相关材料，weixin.properties未填补完整
+###用户和商户删除订单
+url:/wx/order/delete.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+	"order_id":"akslud",//订单号<br/>
+}<br/>
+return: 字符串："true"成功，"false"失败
+###微信支付以及订单接口基本完成

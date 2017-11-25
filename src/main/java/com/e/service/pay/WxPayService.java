@@ -13,7 +13,6 @@ import com.e.model.pay.Freight;
 import com.e.model.pay.Order;
 import com.e.model.pay.ShowOrder;
 import com.e.model.user.UserAddress;
-import com.e.service.user.AddressService;
 import com.e.support.util.StringFromIsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +42,7 @@ public class WxPayService {
     UserAddressDao userAddressDao;
     @Autowired
     RedisDS redisDS;
+    Logger logger = LoggerFactory.getLogger(WxPayService.class);
     /**
      * 需要前端传的参数：thirdsessionid,goods_id,goods_number,user_add_message,address_id,express_company_id
      * @return 订单信息对象 order.openid "lake"缺货 "lose"3rd_session失效
@@ -64,6 +64,7 @@ public class WxPayService {
         //根据货物ID获取货物信息
         Goods goods = goodsDao.getGoods(goods_id);
         if (goods==null){
+            logger.error("can't get GoodsInfo");
             throw new Exception("can't get GoodsInfo");
         }
         //获取购买的货物数量
@@ -88,7 +89,6 @@ public class WxPayService {
             boolean b2 = redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
             //如果重置不成功直接抛异常
             if (!b2){
-                Logger logger = LoggerFactory.getLogger(AddressService.class);
                 logger.error("can't reset time:redis");
                 throw new Exception("can't reset time:redis");
             }
@@ -104,16 +104,19 @@ public class WxPayService {
         order.setOrder_id(openid.substring(0,5)+System.currentTimeMillis());
         UserAddress userAddress = userAddressDao.getTheAddress(address_id,openid);
         if (userAddress==null){
+            logger.error("can't get address");
             throw new Exception("can't get address");
         }
         String freightPrice = getFreightPrice(userAddress.getAddress(),goods_id,express_company_id,goods_number);
         order.setFreight(Integer.parseInt(freightPrice));
         //创建订单
         if (!orderDao.insert(order)){
+            logger.error("can't create order");
             throw new Exception("can't create order");
         }
         //更新货物信息，减少货物总量
         if (!goodsDao.updateNum(goods_id, goods_number)) {
+            logger.error("can't  subtract goods_num");
             throw new Exception("can't  subtract goods_num");
         }
         return order;

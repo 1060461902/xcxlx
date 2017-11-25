@@ -33,4 +33,12 @@ public class OrderController {
         }
         return iss;
     }
+    @RequestMapping(value = "/delete.wx",method = RequestMethod.POST)
+    public String delete(HttpServletRequest request)throws IOException{
+        String iss = "false";
+        if (orderService.deleteOrder(request)){
+            iss = "true";
+        }
+        return iss;
+    }
 }

@@ -32,4 +32,7 @@
     <select id="getAll" resultType="com.e.model.pay.Order">
         SELECT * FROM lx_order
     </select>
+    <delete id="delete">
+        DELETE FROM lx_order WHERE order_id=#{order_id}
+    </delete>
 </mapper>

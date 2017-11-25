@@ -31,7 +31,7 @@ public interface OrderDao {
      * @param order_id 订单号
      * @return 是否删除成功
      * */
-    boolean delete(String order_id);
+    boolean delete(@Param("order_id") String order_id);
     /**
      * 获取所有订单
      * @return 订单信息列表
