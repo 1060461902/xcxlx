@@ -295,4 +295,33 @@ param:json字符串：<br/>
 	"order_id":"akslud",//订单号<br/>
 }<br/>
 return: 字符串："true"成功，"false"失败
-###微信支付以及订单接口基本完成
+###微信支付(未测试)
+url:/wx/wxpay/pay.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+    "thirdsessionid":"test",<br/>
+    "goods_id":"1231asdasdasd",<br/>
+    "goods_number":2,<br/>
+    "user_add_message":"asdasdasd",<br/>
+    "address_id":"asdasd",<br/>
+    "express_company_id":"SF"<br/>
+}<br/>
+return:正常：json字符串：<br/>
+{<br/>
+    "nonceStr":"123asdjashdj123",<br/>
+    "prepay_id":"wx1239128371823",<br/>
+    "timeStamp":"1283761273",<br/>
+    "paySign":"asdasasd"<br/>
+}<br/>
+
+* 签名使用MD5！！！
+
+不正常：<br/>
+|值 | 含义 |
+|--------|--------|
+|fail|建立订单失败|
+|lake|缺货|
+|lose|3rd_sessionid失效|
+|其他|第三方服务器与微信服务器交互错误|
+

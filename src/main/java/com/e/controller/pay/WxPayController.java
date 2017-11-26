@@ -1,10 +1,12 @@
 package com.e.controller.pay;
 
+import com.alibaba.fastjson.JSONObject;
 import com.e.model.pay.MyWxPayConfig;
 import com.e.model.pay.Order;
 import com.e.model.pay.ShowOrder;
 import com.e.service.pay.ShowOrderService;
 import com.e.service.pay.WxPayService;
+import com.e.support.util.PayUtil;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 import org.slf4j.Logger;
@@ -67,25 +69,43 @@ public class WxPayController {
             return "lose";
         }
         ShowOrder showOrder = wxPayService.getShowOrder(order.getOrder_id());
-        if (showOrder==null){
+        /*if (showOrder==null){
             //获取订单失败
             return "fail";
-        }
+        }*/
         //设置请求参数
         Map<String, String> data = new HashMap<>();
+        data.put("openid",showOrder.getOpenid());
         data.put("body", showOrder.getGoods_name()+"-用户支付");//商品描述
         data.put("out_trade_no", showOrder.getOrder_id());//商户订单号
         data.put("fee_type", "CNY");//货币类型 CNY人民币
         data.put("total_fee", String.valueOf(showOrder.getFreight()+showOrder.getGoods_price()*showOrder.getGoods_number()));
         data.put("spbill_create_ip", request.getRemoteAddr());//用户端ip地址
         //TODO:需要修改回调地址
-        data.put("notify_url", "120.78.78.116/wx/wxpay/notify_url.wx");//回调接口地址
+        data.put("notify_url", "http://120.78.78.116/wx/wxpay/notify_url.wx");//回调接口地址
         data.put("trade_type", "JSAPI");  // 此处指定支付方式 小程序指定为 JSAPI
 
         try {
             //发起支付
             Map<String, String> resp = wxpay.unifiedOrder(data);
-            return "true";
+            if (resp.get("return_code").equals("SUCCESS")) {
+                String appId = resp.get("appid");
+                String prepay_id = resp.get("prepay_id");
+                String nonce_str = resp.get("nonce_str");
+                String timeStamp = String.valueOf(System.currentTimeMillis());//时间戳要以字符串的形式传给前端
+                JSONObject jsonObject = new JSONObject();
+                if (resp.get("result_code").equals("SUCCESS")) {
+                    jsonObject.put("prepay_id", prepay_id);
+                }else {
+                    return resp.get("err_code");
+                }
+                jsonObject.put("nonce_str", nonce_str);
+                jsonObject.put("timeStamp", timeStamp);
+                jsonObject.put("paySign", PayUtil.getPaySign(appId,nonce_str,prepay_id,timeStamp));
+                return jsonObject.toString();
+            }else{
+                return resp.get("return_msg");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

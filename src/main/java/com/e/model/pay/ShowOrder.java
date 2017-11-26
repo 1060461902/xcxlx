@@ -1,9 +1,13 @@
 package com.e.model.pay;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * 商户订单信息
  * */
 public class ShowOrder {
+  @JSONField(serialize = false)
+  private String openid;//用户唯一标识
   private String order_id;//商户订单号 openid前5位+时间戳
   private String order_wx_id;//微信订单号
   private String goods_id;//货物ID *
@@ -19,6 +23,14 @@ public class ShowOrder {
   private String phone;//用户联系号码
   private String user_name;//用户姓名
   private String express_company_id;//订单指定的快递公司ID
+
+  public String getOpenid() {
+    return openid;
+  }
+
+  public void setOpenid(String openid) {
+    this.openid = openid;
+  }
 
   public String getExpress_company_id() {
     return express_company_id;
