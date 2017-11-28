@@ -65,4 +65,8 @@ public interface OrderDao {
      * @return 是否成功
      * */
     boolean updateTheOrder(@Param("order_id")String order_id,@Param("status")int status);
+    /**
+     * 获取某人某状态的所有order_id
+     * */
+    List<String> getOrderIDByPAS(@Param("status")int status, @Param("openid") String openid);
 }

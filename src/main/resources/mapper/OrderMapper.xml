@@ -35,4 +35,7 @@
     <delete id="delete">
         DELETE FROM lx_order WHERE order_id=#{order_id}
     </delete>
+    <select id="getOrderIDByPAS" resultType="java.lang.String">
+        SELECT DISTINCT order_id FROM lx_order WHERE openid=#{openid} AND order_status=#{status}
+    </select>
 </mapper>

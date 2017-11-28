@@ -192,24 +192,52 @@ param:json字符串：<br/>
 }<br/>
 return:字符串："fail"重置失败 "lose"3rd_sessionID失效 
    正常：json格式字符串<br/>
-   {"order_status":1,<br/>
-   "address":"涓浗",<br/>
-   "phone":"11122233355",<br/>
-   "user_name":"鐜嬩簲",<br/>
-   "freight":1200,<br/>
-   "order_array":<br/>
-   [<br/>
-   {"goods_name":"榫欒櫨",<br/>
-   "goods_number":2,<br/>
-   "goods_price":1,<br/>
-   "goods_id":"1231asdasdasd",<br/>
-   "goods_img":"192.168.145.1/wx/images/timg.jpg"}<br/>
-   ],<br/>
-   "express_company_id":"SF",<br/>
-   "order_time":1510987445000<br/>
-   ,"user_add_message":"鍟婂疄鎵撳疄",<br/>
-   "order_id":"akslud","order_wx_id":"12312"<br/>
-   }<br/>
+[<br/>
+{"order_status":1,<br/>
+"address":"中国",<br/>
+"phone":"11122233355",<br/>
+"user_name":"王五",<br/>
+"freight":2000,<br/>
+"order_array":<br/>
+[<br/>
+{"goods_name":"龙虾",<br/>
+"goods_number":1,<br/>
+"goods_price":1,<br/>
+"goods_id":"1231asdasdasd",<br/>
+"goods_img":"192.168.145.1/wx/images/timg.jpg"}<br/>
+],<br/>
+"express_company_id":"SF",<br/>
+"order_time":1511885002000,<br/>
+"user_add_message":"asdasd",<br/>
+"order_id":"123212",<br/>
+"order_wx_id":"13212"<br/>
+},<br/>
+{<br/>
+"order_status":1,<br/>
+"address":"中国",<br/>
+"phone":"11122233355",<br/>
+"user_name":"王五",<br/>
+"freight":1200,<br/>
+"order_array":<br/>
+[<br/>
+{"goods_name":"龙虾",<br/>
+"goods_number":2,<br/>
+"goods_price":1,<br/>
+"goods_id":"1231asdasdasd",<br/>
+"goods_img":"192.168.145.1/wx/images/timg.jpg"<br/>
+},<br/>
+{"goods_name":"123312312dasdd",<br/>
+"goods_number":1,<br/>
+"goods_price":2,<br/>
+"goods_id":"13jffs3hasd",<br/>
+"goods_img":"123123saddvz1323/e123123"}<br/>
+],<br/>
+"express_company_id":"SF",<br/>
+"order_time":1510987445000,<br/>
+"user_add_message":"啊实打实",<br/>
+"order_id":"akslud",<br/>
+"order_wx_id":"12312"}<br/>
+]<br/>
 ###商家获取某状态的订单
 url:/wx/wxpay/getthestatusall.wx<br/>
 request method:post<br/>

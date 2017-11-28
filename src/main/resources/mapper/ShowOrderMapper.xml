@@ -41,5 +41,5 @@
         WHERE
         lo.openid = la.openid AND lo.goods_id = lg.goods_id AND lo.address_id = la.address_id AND 
         order_id=#{order_id}
-    </select> 
+    </select>
 </mapper>

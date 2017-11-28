@@ -3,6 +3,7 @@ package com.e.service.pay;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.e.dao.mysql.pay.OrderDao;
 import com.e.dao.mysql.pay.ShowOrderDao;
 import com.e.dao.redis.RedisDS;
 import com.e.model.pay.ShowOrder;
@@ -33,6 +34,8 @@ public class ShowOrderService {
     RedisDS redisDS;
     @Autowired
     MailService mailService;
+    @Autowired
+    OrderDao orderDao;
 
     /**
      * 获取所有订单
@@ -88,7 +91,7 @@ public class ShowOrderService {
      * @return "fail"重置失败 "lose"3rd_sessionID失效 正常：json格式字符串
      * */
     public String getOnePersonTheStatusAll(HttpServletRequest request) throws IOException {
-        JSONObject result = new JSONObject();
+        JSONArray resultArray = new JSONArray();
         request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
@@ -112,32 +115,37 @@ public class ShowOrderService {
         }
         //获取openid
         String openid = sessionValue.split(",")[1];
-        List<ShowOrder>showOrders = showOrderDao.getOnePersonTheStatusAll(order_status,openid);
-        ShowOrder showOrder = showOrders.get(0);
-        result.put("express_company_id",showOrder.getExpress_company_id());
-        result.put("address",showOrder.getAddress());
-        result.put("freight",showOrder.getFreight());
-        result.put("order_id",showOrder.getOrder_id());
-        result.put("order_time",showOrder.getOrder_time());
-        result.put("order_wx_id",showOrder.getOrder_wx_id());
-        result.put("phone",showOrder.getPhone());
-        result.put("user_add_message",showOrder.getUser_add_message());
-        result.put("user_name",showOrder.getUser_name());
-        result.put("order_status",showOrder.getOrder_status());
-        JSONArray showOrderArray = new JSONArray();
-        for (int i=0;i<showOrders.size();i++){
-            ShowOrder indexOrder = showOrders.get(i);
-            JSONObject goods_info = new JSONObject();
-            goods_info.put("goods_id",indexOrder.getGoods_id());
-            goods_info.put("goods_img",indexOrder.getGoods_img());
-            goods_info.put("goods_name",indexOrder.getGoods_name());
-            goods_info.put("goods_number",indexOrder.getGoods_number());
-            goods_info.put("goods_price",indexOrder.getGoods_price());
-            showOrderArray.add(goods_info);
+        List<String> order_id_list = orderDao.getOrderIDByPAS(order_status,openid);
+        for (int k=0;k<order_id_list.size();k++) {
+            String order_id = order_id_list.get(k);
+            List<ShowOrder>showOrders = showOrderDao.getTheShowOrder(order_id);
+            JSONObject result = new JSONObject();
+            ShowOrder showOrder = showOrders.get(0);
+            result.put("express_company_id", showOrder.getExpress_company_id());
+            result.put("address", showOrder.getAddress());
+            result.put("freight", showOrder.getFreight());
+            result.put("order_id", showOrder.getOrder_id());
+            result.put("order_time", showOrder.getOrder_time());
+            result.put("order_wx_id", showOrder.getOrder_wx_id());
+            result.put("phone", showOrder.getPhone());
+            result.put("user_add_message", showOrder.getUser_add_message());
+            result.put("user_name", showOrder.getUser_name());
+            result.put("order_status", showOrder.getOrder_status());
+            JSONArray showOrderArray = new JSONArray();
+            for (int i = 0; i < showOrders.size(); i++) {
+                ShowOrder indexOrder = showOrders.get(i);
+                JSONObject goods_info = new JSONObject();
+                goods_info.put("goods_id", indexOrder.getGoods_id());
+                goods_info.put("goods_img", indexOrder.getGoods_img());
+                goods_info.put("goods_name", indexOrder.getGoods_name());
+                goods_info.put("goods_number", indexOrder.getGoods_number());
+                goods_info.put("goods_price", indexOrder.getGoods_price());
+                showOrderArray.add(goods_info);
+            }
+            result.put("order_array", showOrderArray);
+            resultArray.add(result);
         }
-        result.put("order_array",showOrderArray);
-        System.out.println(result.toJSONString());
-        return result.toJSONString();
+        return resultArray.toJSONString();
     }
     /**
      * 获取某个展示型订单对象

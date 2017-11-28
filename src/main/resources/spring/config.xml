@@ -7,24 +7,6 @@
     <mvc:annotation-driven/>
     <context:component-scan base-package="com.e"/>
 
-    <mvc:annotation-driven>
-        <mvc:message-converters register-defaults="true" >
-            <bean class="com.e.support.MappingFastJsonHttpMessageConverter">
-                <property name="supportedMediaTypes">
-                    <list>
-                        <value>text/html;charset=UTF-8</value>
-                        <value>application/json</value>
-                    </list>
-                </property>
-                <property name="serializerFeature">
-                    <array>
-                        <value>WriteMapNullValue</value>
-                        <value>QuoteFieldNames</value>
-                    </array>
-                </property>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
     <!--mybatis-spring-->
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
