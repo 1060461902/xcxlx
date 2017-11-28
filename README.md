@@ -333,14 +333,6 @@ url:/wx/wxpay/pay.wx<br/>
 request method:post<br/>
 param:json字符串：<br/>
 {<br/>
-    "thirdsessionid":"",<br/>
-    "goods_id":",<br/>
-    "goods_number":2,<br/>
-    "user_add_message":",<br/>
-    "address_id":"",<br/>
-    "express_company_id":"SF"<br/>
-}<br/>
-{<br/>
     "thirdsessionid":"test",<br/>
     "express_company_id":"SF",<br/>
     "address_id":"asdasd",<br/>
