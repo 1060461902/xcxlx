@@ -1,0 +1,11 @@
+/*返回运费的json*/
+{
+  "address":"",
+  "express_company_id":"",
+  "goods_array":[
+    {
+      "goods_id":"",
+      "goods_number":1
+    }
+  ]
+}

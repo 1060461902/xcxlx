@@ -2,7 +2,6 @@ package com.e.controller.pay;
 
 import com.alibaba.fastjson.JSONObject;
 import com.e.model.pay.MyWxPayConfig;
-import com.e.model.pay.Order;
 import com.e.model.pay.ShowOrder;
 import com.e.service.pay.ShowOrderService;
 import com.e.service.pay.WxPayService;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,29 +54,18 @@ public class WxPayController {
     @RequestMapping(value = "/pay.wx",method = RequestMethod.POST)
     public String pay(HttpServletResponse response,HttpServletRequest request) throws Exception {
         //TODO:这里执行商户系统创建新的订单操作
-        Order order = wxPayService.createOrder(request);
-        if (order==null){
-            //建立订单失败
-            return "fail";
-        }else if (order.getOpenid().equals("lake")){
-            //缺货
-            return "lake";
-        }else if (order.getOpenid().equals("lose")){
-            //3rd_sessionid失效
-            return "lose";
+        JSONObject result = wxPayService.createOrder(request);
+        String err = result.getString("error");
+        if (err!=null){
+            return result.toJSONString();
         }
-        ShowOrder showOrder = wxPayService.getShowOrder(order.getOrder_id());
-        /*if (showOrder==null){
-            //获取订单失败
-            return "fail";
-        }*/
         //设置请求参数
         Map<String, String> data = new HashMap<>();
-        data.put("openid",showOrder.getOpenid());
-        data.put("body", showOrder.getGoods_name()+"-用户支付");//商品描述
-        data.put("out_trade_no", showOrder.getOrder_id());//商户订单号
+        data.put("openid",result.getString("openid"));
+        data.put("body", "无虾不欢-用户支付");//商品描述
+        data.put("out_trade_no", result.getString("order_id"));//商户订单号
         data.put("fee_type", "CNY");//货币类型 CNY人民币
-        data.put("total_fee", String.valueOf(showOrder.getFreight()+showOrder.getGoods_price()*showOrder.getGoods_number()));
+        data.put("total_fee", String.valueOf(result.getInteger("prices")+result.getInteger("freights")));
         data.put("spbill_create_ip", request.getRemoteAddr());//用户端ip地址
         //TODO:需要修改回调地址
         data.put("notify_url", "http://120.78.78.116/wx/wxpay/notify_url.wx");//回调接口地址
@@ -138,8 +124,8 @@ public class WxPayController {
         String resXml = "";
         //验证签名
         if (wxpay.isPayResultNotifySignatureValid(notifyMap)) {        // 签名正确
-            ShowOrder order = wxPayService.getShowOrder(notifyMap.get("out_trade_no"));
-            if(order != null) {
+            List<ShowOrder> orders = wxPayService.getShowOrder(notifyMap.get("out_trade_no"));
+            if(orders != null) {
                 if("SUCCESS".equals(notifyMap.get("result_code"))) {    //交易成功
                     // TODO:更新订单
                     wxPayService.updateOrder(notifyMap.get("out_trade_no"),1);//将订单状态设置为交易成功
@@ -234,8 +220,13 @@ public class WxPayController {
      * @param request 需要 thirdsessionid,order_status
      * @return "fail"重置失败 "lose"3rd_sessionID失效 正常：json格式字符串
      * */
-    @RequestMapping(value = "/getonepersonthestatusall.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
-    public String getOnePersonTheStatusAll(HttpServletRequest request) throws IOException {
-        return showOrderService.getOnePersonTheStatusAll(request);
+    @RequestMapping(value = "/getonepersonthestatusall.wx",method = RequestMethod.POST)
+    public void getOnePersonTheStatusAll(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.write(showOrderService.getOnePersonTheStatusAll(request));
+        out.flush();
+        out.close();
     }
 }

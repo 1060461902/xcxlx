@@ -172,10 +172,14 @@ url:/wx/wxpay/freight.wx<br/>
 request method:post<br/>
 param:json字符串：<br/>
 {<br/>
-	"address":"浙江省杭州市江干区",//地址<br/>
-	"goods_id":"1231asdasdasd",//货物编号<br/>
-	"express_company_id":"SF",//快递公司ID SF：顺丰 目前只有顺丰<br/>
-	"goods_number";3//订货数量
+  "address":"浙江省杭州市江干区",<br/>
+  "express_company_id":"SF",<br/>
+  "goods_array":[<br/>
+    {<br/>
+      "goods_id":"1231asdasdasd",<br/>
+      "goods_number":1<br/>
+    }<br/>
+  ]<br/>
 }<br/>
 return:字符串："unknown":获取不到运费 "4250"（数字）:运费价格，单位 分
 ###获取某人某状态的订单
@@ -188,23 +192,24 @@ param:json字符串：<br/>
 }<br/>
 return:字符串："fail"重置失败 "lose"3rd_sessionID失效 
    正常：json格式字符串<br/>
+   {"order_status":1,<br/>
+   "address":"涓浗",<br/>
+   "phone":"11122233355",<br/>
+   "user_name":"鐜嬩簲",<br/>
+   "freight":1200,<br/>
+   "order_array":<br/>
    [<br/>
-   {"address":"中国",//地址<br/>
-   "express_company_id":"SF",//快递公司ID<br/>
-   "freight":1200,//运费价格<br/>
-   "goods_id":"1231asdasdasd",//货物ID<br/>
-   "goods_img":"E:\\ideawk\\xcxlx\\out\\artifacts\\xcxlx_war_exploded\\images/1.jpg",<br/>
-   "goods_name":"沙发上",//货物名<br/>
-   "goods_number":2,//购买数量<br/>
-   "goods_price":1200,//货物价格 单位 分<br/>
-   "order_id":"akslud",//订单编号 后台生成<br/>
-   "order_status":0,//订单状态 0未支付成功 1支付成功 2订单完成<br/>
-   "order_time":1510987445000,//订单时间戳<br/>
-   "order_wx_id":"12312",//微信订单号<br/>
-   "phone":"11122233355",//用户电话号码<br/>
-   "user_add_message":"啊实打实",//用户备注<br/>
-   "user_name":"王五"}//用户姓名<br/>
-   ]
+   {"goods_name":"榫欒櫨",<br/>
+   "goods_number":2,<br/>
+   "goods_price":1,<br/>
+   "goods_id":"1231asdasdasd",<br/>
+   "goods_img":"192.168.145.1/wx/images/timg.jpg"}<br/>
+   ],<br/>
+   "express_company_id":"SF",<br/>
+   "order_time":1510987445000<br/>
+   ,"user_add_message":"鍟婂疄鎵撳疄",<br/>
+   "order_id":"akslud","order_wx_id":"12312"<br/>
+   }<br/>
 ###商家获取某状态的订单
 url:/wx/wxpay/getthestatusall.wx<br/>
 request method:post<br/>
@@ -300,12 +305,24 @@ url:/wx/wxpay/pay.wx<br/>
 request method:post<br/>
 param:json字符串：<br/>
 {<br/>
-    "thirdsessionid":"test",<br/>
-    "goods_id":"1231asdasdasd",<br/>
+    "thirdsessionid":"",<br/>
+    "goods_id":",<br/>
     "goods_number":2,<br/>
-    "user_add_message":"asdasdasd",<br/>
-    "address_id":"asdasd",<br/>
+    "user_add_message":",<br/>
+    "address_id":"",<br/>
     "express_company_id":"SF"<br/>
+}<br/>
+{<br/>
+    "thirdsessionid":"test",<br/>
+    "express_company_id":"SF",<br/>
+    "address_id":"asdasd",<br/>
+    "user_add_message":"asdasdasd",<br/>
+    "goods_array":[<br/>
+        {<br/>
+            "goods_id":"1231asdasdasd",<br/>
+            "goods_number":1<br/>
+        }<br/>
+    ]<br/>
 }<br/>
 return:正常：json字符串：<br/>
 {<br/>
@@ -319,9 +336,8 @@ return:正常：json字符串：<br/>
 
 不正常：<br/>
 |值 | 含义 |
-|--------|--------|
-|fail|建立订单失败|
-|lake|缺货|
-|lose|3rd_sessionid失效|
+|---------------------|----------------------|
+|{"error":"lake","goods_id":""}|缺货 缺货的货品ID|
+|{"error":"lose"}|3rd_sessionid失效|
 |其他|第三方服务器与微信服务器交互错误|
 

@@ -1,6 +1,5 @@
 package com.e.service.pay;
 
-import com.e.model.pay.ShowOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ public class ShowOrderServiceTest {
     ShowOrderService showOrderService;
     @Test
     public void sendObjectEmail() throws Exception {
-        ShowOrder showOrder = showOrderService.getTheOrder("akslud");
-        showOrderService.sendObjectEmail(showOrder,ShowOrder.class);
-    }
 
+    }
 }

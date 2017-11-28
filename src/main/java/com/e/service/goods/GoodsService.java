@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
 
 /**
@@ -38,12 +39,14 @@ public class GoodsService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        InetAddress address = InetAddress.getLocalHost();//获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
+        String hostAddress = address.getHostAddress();
         String goods_id = request.getParameter("goods_id");
         String goods_name = request.getParameter("goods_name");
         String goods_price = request.getParameter("goods_price");
         String goods_num = request.getParameter("goods_num");
         String goods_weight = request.getParameter("goods_weight");
-        String goods_img = path+"/"+fileName;
+        String goods_img = hostAddress+request.getContextPath()+"/images/"+fileName;
         Goods goods = new Goods();
         goods.setGoods_img(goods_img);
         goods.setGoods_price(Integer.parseInt(goods_price));

@@ -1,0 +1,15 @@
+/**
+ * Created by asus on 2017/11/28.
+ */
+{
+    "thirdsessionid":"",
+    "express_company_id":"",
+    "address_id":"",
+    "user_add_message":"",
+    "goods_array":[
+        {
+            "goods_id":"",
+            "goods_number":1
+        }
+    ]
+}

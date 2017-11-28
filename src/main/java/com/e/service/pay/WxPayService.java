@@ -1,6 +1,7 @@
 package com.e.service.pay;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.e.dao.mysql.goods.GoodsDao;
 import com.e.dao.mysql.pay.FreightDao;
@@ -24,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by asus on 2017/11/6.
@@ -44,44 +47,25 @@ public class WxPayService {
     RedisDS redisDS;
     Logger logger = LoggerFactory.getLogger(WxPayService.class);
     /**
-     * 需要前端传的参数：thirdsessionid,goods_id,goods_number,user_add_message,address_id,express_company_id
-     * @return 订单信息对象 order.openid "lake"缺货 "lose"3rd_session失效
+     * 需要前端传的参数：thirdsessionid,goods_array[{goods_id,goods_number}],user_add_message,address_id,express_company_id
+     * @return 订单信息对象 order.openid {"error":"lake","goods_id":""}缺货 {"error":"lose"}3rd_session失效
      * */
     @Transactional
-    public Order createOrder(HttpServletRequest request) throws Exception {
-        Order order = new Order();
-        //设置订单状态为 0 正在支付(未支付成功)
-        order.setOrder_status(0);
-        order.setOrder_time(new Timestamp(new java.util.Date().getTime()));
+    public JSONObject createOrder(HttpServletRequest request) throws Exception {
         request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
+        JSONObject result = new JSONObject();
         JSONObject jsonObject = JSON.parseObject(json);
         //获取3rd_sessionID
         String thirdSessionID = jsonObject.getString("thirdsessionid");
-        //获取货物ID
-        String goods_id = jsonObject.getString("goods_id");
-        order.setGoods_id(goods_id);
-        //根据货物ID获取货物信息
-        Goods goods = goodsDao.getGoods(goods_id);
-        if (goods==null){
-            logger.error("can't get GoodsInfo");
-            throw new Exception("can't get GoodsInfo");
-        }
-        //获取购买的货物数量
-        int goods_number = jsonObject.getInteger("goods_number");
-        if (goods.getGoods_num()<goods_number){
-            //如果缺货，返回openid为"lake"的订单对象
-            order.setOpenid("lake");
-            return order;
-        }
         //获取用户附加信息
         String user_add_message = jsonObject.getString("user_add_message");
-        order.setUser_add_message(user_add_message);
         //获取地址ID
         String address_id = jsonObject.getString("address_id");
-        order.setAddress_id(address_id);
+        //获取快递公司ID
         String express_company_id = jsonObject.getString("express_company_id");
-        order.setExpress_company_id(express_company_id);
+        //获取订单货物数组
+        JSONArray goodsArray = jsonObject.getJSONArray("goods_array");
         //获取在redis中存储的用户信息
         String sessionValue = redisDS.getByKey(thirdSessionID);
         if (sessionValue!=null&&!sessionValue.equals("")){
@@ -93,36 +77,79 @@ public class WxPayService {
                 throw new Exception("can't reset time:redis");
             }
         }else {
-            //如果redis中3rd_sessionID失效,返回openid为lose的Order对象
-            order.setOpenid("lose");
-            return order;
+            //如果redis中3rd_sessionID失效,返回lose
+            result.put("error","lose");
+            return result;
         }
         //获取openid
         String openid = sessionValue.split(",")[1];
-        order.setOpenid(openid);
-        //拼接商户订单号
-        order.setOrder_id(openid.substring(0,5)+System.currentTimeMillis());
+        //拼接订单号
+        String order_id = openid.substring(0,5)+System.currentTimeMillis();
         UserAddress userAddress = userAddressDao.getTheAddress(address_id,openid);
         if (userAddress==null){
             logger.error("can't get address");
             throw new Exception("can't get address");
         }
-        String freightPrice = getFreightPrice(userAddress.getAddress(),goods_id,express_company_id,goods_number);
-        order.setFreight(Integer.parseInt(freightPrice));
-        //创建订单
-        if (!orderDao.insert(order)){
-            logger.error("can't create order");
-            throw new Exception("can't create order");
+        //总重
+        double weights = 0;
+        int prices = 0;
+        List<Order>orders = new ArrayList<>();
+        for (int i=0;i<goodsArray.size();i++){
+            Order order = new Order();
+            //设置订单状态为 0 正在支付(未支付成功)
+            order.setOrder_status(0);
+            order.setOrder_time(new Timestamp(new java.util.Date().getTime()));
+            order.setUser_add_message(user_add_message);
+            order.setAddress_id(address_id);
+            order.setExpress_company_id(express_company_id);
+            order.setOpenid(openid);
+            order.setOrder_id(order_id);
+            JSONObject goodsJson = goodsArray.getJSONObject(i);
+            //获取购买的货物数量
+            int goods_number = goodsJson.getInteger("goods_number");
+            order.setGoods_number(goods_number);
+            //获取货物ID
+            String goods_id = goodsJson.getString("goods_id");
+            order.setGoods_id(goods_id);
+            //根据货物ID获取货物信息
+            Goods goods = goodsDao.getGoods(goods_id);
+            if (goods==null){
+                logger.error("can't get GoodsInfo");
+                throw new Exception("can't get GoodsInfo");
+            }
+            if (goods.getGoods_num()<goods_number){
+                //如果缺货，返回openid为"lake"的订单对象
+                result.put("error","lake");
+                result.put("goods_id",goods_id);
+                return result;
+            }
+            prices = prices+goods.getGoods_price()*goods_number;
+            weights = weights+goods.getGoods_weight()*goods_number;
+            orders.add(order);
         }
-        //更新货物信息，减少货物总量
-        if (!goodsDao.updateNum(goods_id, goods_number)) {
-            logger.error("can't  subtract goods_num");
-            throw new Exception("can't  subtract goods_num");
+        String freights = getFreightPrice(userAddress.getAddress(),weights,express_company_id);
+        for (int i=0;i<orders.size();i++) {
+            Order order = orders.get(i);
+            order.setFreight(Integer.parseInt(freights));
+            //创建订单
+            if (!orderDao.insert(order)) {
+                logger.error("can't create order");
+                throw new Exception("can't create order");
+            }
+            //更新货物信息，减少货物总量
+            if (!goodsDao.updateNum(order.getGoods_id(), order.getGoods_number())) {
+                logger.error("can't  subtract goods_num");
+                throw new Exception("can't  subtract goods_num");
+            }
         }
-        return order;
+        result.put("freights",Integer.parseInt(freights));
+        result.put("prices",prices);
+        result.put("openid",openid);
+        result.put("order_id",order_id);
+        return result;
     }
 
-    public ShowOrder getShowOrder(String order_id) {
+    public List<ShowOrder> getShowOrder(String order_id) {
          return showOrderDao.getTheShowOrder(order_id);
     }
 
@@ -138,10 +165,17 @@ public class WxPayService {
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         String address = jsonObject.getString("address");
-        String goods_id = jsonObject.getString("goods_id");
         String express_company_id = jsonObject.getString("express_company_id");
-        int goods_number = jsonObject.getInteger("goods_number");
-        return getFreightPrice(address,goods_id,express_company_id,goods_number);
+        JSONArray goods_array = jsonObject.getJSONArray("goods_array");
+        double weights = 0;
+        for (int i=0;i<goods_array.size();i++){
+            JSONObject goodsJson = goods_array.getJSONObject(i);
+            Goods goods = goodsDao.getGoods(goodsJson.getString("goods_id"));
+            int goods_num = goodsJson.getInteger("goods_number");
+            double weight = goods.getGoods_weight();
+            weights = weights+weight*goods_num;
+        }
+        return getFreightPrice(address,weights,express_company_id);
     }
     /**
      * 获取运费价格 单位 分
@@ -150,12 +184,11 @@ public class WxPayService {
      *                普通省：XX省XX市(市必须是地级市)
      *                自治区：XX自治区XX市(市必须是地级市)
      *                直辖市：xxx市
-     * @param goods_id 货物ID
+     * @param goods_weight 货物总重
      * @param express_company_id 快递公司ID
-     * @param goods_number 货物数量
      * @return 运费价格字符串格式 单位 分
      * */
-    public String getFreightPrice(String address,String goods_id,String express_company_id,int goods_number) throws IOException {
+    public String getFreightPrice(String address,double goods_weight,String express_company_id) throws IOException {
         int provinceIndex = address.indexOf("省");
         int cityIndex = address.indexOf("市");
         String province;
@@ -183,8 +216,7 @@ public class WxPayService {
                 return "unknown";
             }
         }
-        Goods goods = goodsDao.getGoods(goods_id);
-        BigDecimal decimal = calculation(goods.getGoods_weight()*goods_number,freight,1);
+        BigDecimal decimal = calculation(goods_weight,freight,1);
         return decimal.multiply(new BigDecimal("100")).setScale(0).toString();
     }
     /**
@@ -211,7 +243,9 @@ public class WxPayService {
             BigDecimal zsbd = new BigDecimal(zs);
             BigDecimal xsbd = wgt.subtract(zsbd);
             BigDecimal half = new BigDecimal("0.5");
-            if (xsbd.compareTo(half)<=0){
+            if (xsbd.compareTo(new BigDecimal("0.0"))==0) {
+                wgt = zsbd;
+            }else if (xsbd.compareTo(half)<=0){
                 wgt = zsbd.add(half);
             }else {
                 wgt = zsbd.add(half).add(half);

@@ -40,5 +40,5 @@ public interface ShowOrderDao {
      * @param order_id 订单号
      * @return 展示型订单信息对象
      * */
-    ShowOrder getTheShowOrder(@Param("order_id")String order_id);
+    List<ShowOrder> getTheShowOrder(@Param("order_id")String order_id);
 }
