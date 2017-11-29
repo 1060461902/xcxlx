@@ -44,14 +44,14 @@ public class GoodsService {
         String goods_id = request.getParameter("goods_id");
         String goods_name = request.getParameter("goods_name");
         String goods_price = request.getParameter("goods_price");
-        String goods_num = request.getParameter("goods_num");
+        String goods_ava = request.getParameter("goods_ava");
         String goods_weight = request.getParameter("goods_weight");
         String goods_img = hostAddress+request.getContextPath()+"/images/"+fileName;
         Goods goods = new Goods();
         goods.setGoods_img(goods_img);
         goods.setGoods_price(Integer.parseInt(goods_price));
         goods.setGoods_name(goods_name);
-        goods.setGoods_num(Integer.parseInt(goods_num));
+        goods.setGoods_ava(Integer.parseInt(goods_ava));
         goods.setGoods_id(goods_id);
         goods.setGoods_weight(Double.parseDouble(goods_weight));
         return dao.addORUpdate(goods);

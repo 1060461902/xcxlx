@@ -1,11 +1,13 @@
 package com.e.controller.pay;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.e.model.pay.MyWxPayConfig;
 import com.e.model.pay.ShowOrder;
 import com.e.service.pay.ShowOrderService;
 import com.e.service.pay.WxPayService;
 import com.e.support.util.PayUtil;
+import com.e.support.util.StringFromIsUtil;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 import org.slf4j.Logger;
@@ -51,12 +53,14 @@ public class WxPayController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/pay.wx",method = RequestMethod.POST)
+    @RequestMapping(value = "/pay.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     public String pay(HttpServletResponse response,HttpServletRequest request) throws Exception {
+        Logger logger = LoggerFactory.getLogger(WxPayController.class);
         //TODO:这里执行商户系统创建新的订单操作
         JSONObject result = wxPayService.createOrder(request);
         String err = result.getString("error");
         if (err!=null){
+            logger.error(result.toJSONString());
             return result.toJSONString();
         }
         //设置请求参数
@@ -66,9 +70,10 @@ public class WxPayController {
         data.put("out_trade_no", result.getString("order_id"));//商户订单号
         data.put("fee_type", "CNY");//货币类型 CNY人民币
         data.put("total_fee", String.valueOf(result.getInteger("prices")+result.getInteger("freights")));
+        //System.out.println(String.valueOf(result.getInteger("prices")+result.getInteger("freights")));
         data.put("spbill_create_ip", request.getRemoteAddr());//用户端ip地址
         //TODO:需要修改回调地址
-        data.put("notify_url", "http://120.78.78.116/wx/wxpay/notify_url.wx");//回调接口地址
+        data.put("notify_url", "http://127.0.0.1/wx/wxpay/notify_url.wx");//回调接口地址
         data.put("trade_type", "JSAPI");  // 此处指定支付方式 小程序指定为 JSAPI
 
         try {
@@ -83,6 +88,7 @@ public class WxPayController {
                 if (resp.get("result_code").equals("SUCCESS")) {
                     jsonObject.put("prepay_id", prepay_id);
                 }else {
+                    logger.error(resp.get("err_code"));
                     return resp.get("err_code");
                 }
                 jsonObject.put("nonce_str", nonce_str);
@@ -90,12 +96,21 @@ public class WxPayController {
                 jsonObject.put("paySign", PayUtil.getPaySign(appId,nonce_str,prepay_id,timeStamp));
                 return jsonObject.toString();
             }else{
+                logger.error(resp.get("return_msg"));
                 return resp.get("return_msg");
             }
         } catch (Exception e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
         return "false";
+    }
+    /**
+     * 用户重新支付
+     * */
+    @RequestMapping(value = "/repay.wx",method = RequestMethod.POST)
+    public void rePay(HttpServletRequest request){
+
     }
 
     /**
@@ -151,7 +166,6 @@ public class WxPayController {
             }
             // 注意特殊情况：订单已经退款，但收到了支付结果成功的通知，不应把商户侧订单状态从退款改成支付成功
 
-
         } else {  // 签名错误，如果数据里没有sign字段，也认为是签名错误
             wxPayService.updateOrder(notifyMap.get("out_trade_no"),5);//将订单状态设置为交易失败
             //设置失败确认内容
@@ -159,10 +173,28 @@ public class WxPayController {
             Logger logger = LoggerFactory.getLogger(WxPayController.class);
             logger.error("交易未成功 签名错误");
             //发送通知
-            response.getWriter().println(resXml);
+            PrintWriter out = response.getWriter();
+            out.println(resXml);
+            out.flush();
+            out.close();
         }
     }
 
+    /**
+     * 用户确认收货
+     * */
+    @RequestMapping(value = "/confirm.wx",method = RequestMethod.POST)
+    public String confirm(HttpServletRequest request) throws IOException {
+        String iss = "false";
+        request.setCharacterEncoding("UTF-8");
+        String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
+        JSONObject jsonObject = JSON.parseObject(json);
+        String order_id = jsonObject.getString("order_id");
+        if (wxPayService.updateOrder(order_id,2)){
+            iss = "true";
+        }
+        return iss;
+    }
     /**
      * 微信申请退款接口
      * @param out_trade_no 订单号

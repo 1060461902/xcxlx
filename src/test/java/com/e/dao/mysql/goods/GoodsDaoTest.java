@@ -44,7 +44,7 @@ public class GoodsDaoTest {
         Goods goods = new Goods();
         goods.setGoods_id("12983h13hasd");
         goods.setGoods_name("1233123safasd");
-        goods.setGoods_num(130);
+        goods.setGoods_ava(1);
         goods.setGoods_price(9000);
         assertTrue(dao.update(goods));
     }
@@ -53,10 +53,5 @@ public class GoodsDaoTest {
     public void getGoods(){
         Goods goods = dao.getGoods("1231asdasdasd");
         System.out.println(goods.getGoods_name());
-    }
-
-    @Test
-    public void updateNum(){
-        assertTrue(dao.updateNum("1231asdasdasd",1));
     }
 }

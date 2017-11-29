@@ -9,7 +9,7 @@ public class Goods {
     private String goods_name;//货物名称
     private int goods_price;//货物价格，单位 分
     private String goods_img;//货物图片地址
-    private int goods_num;//货物数量
+    private int goods_ava;//货物是否售卖
     private double goods_weight;
 
     public double getGoods_weight() {
@@ -20,12 +20,12 @@ public class Goods {
         this.goods_weight = goods_weight;
     }
 
-    public int getGoods_num() {
-        return goods_num;
+    public int getGoods_ava() {
+        return goods_ava;
     }
 
-    public void setGoods_num(int goods_num) {
-        this.goods_num = goods_num;
+    public void setGoods_ava(int goods_ava) {
+        this.goods_ava = goods_ava;
     }
 
     public String getGoods_id() {

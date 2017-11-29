@@ -47,11 +47,11 @@ public class MyWxPayConfig implements WXPayConfig {
 
     @Override
     public int getHttpConnectTimeoutMs() {
-        return 8000;
+        return 30000;
     }
 
     @Override
     public int getHttpReadTimeoutMs() {
-        return 10000;
+        return 30000;
     }
 }

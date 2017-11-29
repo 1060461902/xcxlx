@@ -117,7 +117,7 @@ public class WxPayService {
                 logger.error("can't get GoodsInfo");
                 throw new Exception("can't get GoodsInfo");
             }
-            if (goods.getGoods_num()<goods_number){
+            if (goods.getGoods_ava()==0){
                 //如果缺货，返回openid为"lake"的订单对象
                 result.put("error","lake");
                 result.put("goods_id",goods_id);
@@ -135,11 +135,6 @@ public class WxPayService {
             if (!orderDao.insert(order)) {
                 logger.error("can't create order");
                 throw new Exception("can't create order");
-            }
-            //更新货物信息，减少货物总量
-            if (!goodsDao.updateNum(order.getGoods_id(), order.getGoods_number())) {
-                logger.error("can't  subtract goods_num");
-                throw new Exception("can't  subtract goods_num");
             }
         }
         result.put("freights",Integer.parseInt(freights));

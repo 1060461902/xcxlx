@@ -49,8 +49,4 @@ public interface GoodsDao {
      * @return 货物信息对象
      * */
     Goods getGoods(@Param("goods_id") String goods_id);
-    /**
-     *更新货物数量
-     * */
-    boolean updateNum(@Param("goods_id") String goods_id, @Param("delNum") int delNum);
 }
