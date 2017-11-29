@@ -79,7 +79,7 @@ param:表单格式：<br/>
 goods_id:货物ID 不超过50个字符 商家输入<br/>
 goods_name:货物名称 不超过50个字符<br/>
 goods_price:货物价格 单位 分<br/>
-goods_ava:货物是否售卖<br/>
+goods_ava:货物是否售卖 1是 0否<br/>
 goods_weight:货物重量 单位kg 保留小数点一位<br/>
 file:商品图片<br/>
 return: 字符串："true"操作成功，"false"操作失败
@@ -336,7 +336,7 @@ param:json字符串：<br/>
 	"order_id":"akslud",//订单号<br/>
 }<br/>
 return: 字符串："true"成功，"false"失败
-###微信支付(未测试)
+###微信支付(测试成功)
 url:/wx/wxpay/pay.wx<br/>
 request method:post<br/>
 param:json字符串：<br/>

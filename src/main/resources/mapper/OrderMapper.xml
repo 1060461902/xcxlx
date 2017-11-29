@@ -38,4 +38,7 @@
     <select id="getOrderIDByPAS" resultType="java.lang.String">
         SELECT DISTINCT order_id FROM lx_order WHERE openid=#{openid} AND order_status=#{status}
     </select>
+    <select id="getOrderByID" resultType="com.e.model.pay.Order">
+        SELECT * FROM lx_order WHERE order_id=#{order_id}
+    </select>
 </mapper>

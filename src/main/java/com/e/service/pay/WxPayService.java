@@ -144,6 +144,43 @@ public class WxPayService {
         return result;
     }
 
+    /**
+     * 用户对未支付订单重新下单
+     * 只需要订单ID
+     * */
+    @Transactional
+    public JSONObject rePay(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
+        JSONObject result = new JSONObject();
+        JSONObject jsonObject = JSON.parseObject(json);
+        String order_id = jsonObject.getString("order_id");
+        List<Order>orders = orderDao.getOrderByID(order_id);
+        Order order = orders.get(0);
+        String openid = order.getOpenid();
+        int freights = order.getFreight();
+        //String user_add_message = order.getUser_add_message();
+        int prices = 0;
+        for (int i=0;i<orders.size();i++){
+            Order indexOrder = orders.get(i);
+            String goods_id = indexOrder.getGoods_id();
+            Goods goods = goodsDao.getGoods(goods_id);
+            if (goods.getGoods_ava()==0){
+                //如果缺货，返回openid为"lake"的订单对象
+                result.put("error","lake");
+                result.put("goods_id",goods_id);
+                return result;
+            }
+            int goods_price = goods.getGoods_price();
+            int goods_number = indexOrder.getGoods_number();
+            prices = prices+goods_number*goods_price;
+        }
+        result.put("freights",freights);
+        result.put("prices",prices);
+        result.put("openid",openid);
+        result.put("order_id",order_id);
+        return result;
+    }
     public List<ShowOrder> getShowOrder(String order_id) {
          return showOrderDao.getTheShowOrder(order_id);
     }
