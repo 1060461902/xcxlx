@@ -78,12 +78,42 @@ public class ShowOrderService {
      * @return json格式字符串
      * */
     public String getTheStatusAll(HttpServletRequest request) throws IOException {
+        JSONArray resultArray = new JSONArray();
         request.setCharacterEncoding("UTF-8");
         String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         JSONObject jsonObject = JSON.parseObject(json);
         int order_status = jsonObject.getInteger("order_status");
-        List<ShowOrder>showOrderList = showOrderDao.getTheStatusAll(order_status);
-        return JSON.toJSONString(showOrderList);
+        List<String>order_ids = orderDao.getOrderIDByStatus(order_status);
+        for (int i=0;i<order_ids.size();i++){
+            String order_id = order_ids.get(i);
+            JSONObject result = new JSONObject();
+            List<ShowOrder> showOrders = showOrderDao.getTheShowOrder(order_id);
+            ShowOrder firstShowOrder = showOrders.get(0);
+            result.put("express_company_id", firstShowOrder.getExpress_company_id());
+            result.put("address", firstShowOrder.getAddress());
+            result.put("freight", firstShowOrder.getFreight());
+            result.put("order_id", firstShowOrder.getOrder_id());
+            result.put("order_time", firstShowOrder.getOrder_time());
+            result.put("order_wx_id", firstShowOrder.getOrder_wx_id());
+            result.put("phone", firstShowOrder.getPhone());
+            result.put("user_add_message", firstShowOrder.getUser_add_message());
+            result.put("user_name", firstShowOrder.getUser_name());
+            result.put("order_status", firstShowOrder.getOrder_status());
+            JSONArray showOrderArray = new JSONArray();
+            for (int j = 0; j < showOrders.size(); j++) {
+                ShowOrder indexOrder = showOrders.get(j);
+                JSONObject goods_info = new JSONObject();
+                goods_info.put("goods_id", indexOrder.getGoods_id());
+                goods_info.put("goods_img", indexOrder.getGoods_img());
+                goods_info.put("goods_name", indexOrder.getGoods_name());
+                goods_info.put("goods_number", indexOrder.getGoods_number());
+                goods_info.put("goods_price", indexOrder.getGoods_price());
+                showOrderArray.add(goods_info);
+            }
+            result.put("order_array", showOrderArray);
+            resultArray.add(result);
+        }
+        return resultArray.toJSONString();
     }
     /**
      * 获取某人某状态的订单

@@ -72,6 +72,10 @@ public interface OrderDao {
      * */
     List<String> getOrderIDByPAS(@Param("status")int status, @Param("openid") String openid);
     /**
+     *
+     * */
+    List<String> getOrderIDByStatus(@Param("status")int status);
+    /**
      * 获取对应订单号的所有订单
      * @param order_id 订单ID
      * @return 订单号对应的订单对象列表
