@@ -188,6 +188,7 @@ public class ShowOrderService {
     /**
      * 根据对象发送订单邮件
      * */
+    @Deprecated
     public <T>void sendObjectEmail(List<T> list,Class<T> cls) throws MessagingException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.e.model.pay.MyWxPayConfig;
 import com.e.model.pay.ShowOrder;
+import com.e.service.mail.SendOrderMailService;
 import com.e.service.pay.ShowOrderService;
 import com.e.service.pay.WxPayService;
 import com.e.support.util.IPUtil;
@@ -38,6 +39,8 @@ public class WxPayController {
     private WxPayService wxPayService;
     @Autowired
     private ShowOrderService showOrderService;
+    @Autowired
+    private SendOrderMailService sendOrderMailService;
 
     public WxPayController() {
         try {
@@ -109,7 +112,7 @@ public class WxPayController {
     /**
      * 用户重新支付
      * */
-    @RequestMapping(value = "/repay.wx",method = RequestMethod.POST)
+    @RequestMapping(value = "/repay.wx",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     public String rePay(HttpServletRequest request) throws IOException {
         Logger logger = LoggerFactory.getLogger(WxPayController.class);
         //TODO:这里执行商户系统创建新的订单操作
@@ -193,10 +196,10 @@ public class WxPayController {
                 if("SUCCESS".equals(notifyMap.get("result_code"))) {    //交易成功
                     // TODO:更新订单
                     wxPayService.updateOrder(notifyMap.get("out_trade_no"),1);//将订单状态设置为交易成功
-                    //速度过慢，时间过长
-                    /*//TODO:发送邮件通知商家
-                    ShowOrder showOrder = showOrderService.getTheOrder(notifyMap.get("out_trade_no"));
-                    showOrderService.sendObjectEmail(showOrder,ShowOrder.class);*/
+
+                    //TODO:发送邮件通知商家 后续需要删除 临时使用
+                    sendOrderMailService.sendOrderMail(notifyMap.get("out_trade_no"));
+
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付成功");
                     //设置成功确认内容
                     resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
