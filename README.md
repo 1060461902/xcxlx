@@ -238,14 +238,6 @@ return:字符串："fail"重置失败 "lose"3rd_sessionID失效
 "order_id":"akslud",<br/>
 "order_wx_id":"12312"}<br/>
 ]<br/>
-###用户确认收货
-url:/wx/wxpay/confirm.wx<br/>
-request method:post<br/>
-param:json字符串：<br/>
-{<br/>
-	"order_id":"okok2342341412" //订单号<br/>
-}<br/>
-return: 字符串："true"操作成功，"false"操作失败
 ###商家获取某状态的订单
 url:/wx/wxpay/getthestatusall.wx<br/>
 request method:post<br/>
@@ -368,4 +360,19 @@ return:正常：json字符串：<br/>
 |{"error":"lake","goods_id":""}|缺货 缺货的货品ID|
 |{"error":"lose"}|3rd_sessionid失效|
 |其他|第三方服务器与微信服务器交互错误|
-
+###用户对未支付订单重新支付
+url:/wx/wxpay/repay.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+    "order_id":"akslud"//订单ID<br/>
+}<br/>
+return:同微信支付接口
+###用户确认收货
+url:/wx/wxpay/confirm.wx<br/>
+request method:post<br/>
+param:json字符串：<br/>
+{<br/>
+	"order_id":"okok2342341412" //订单号<br/>
+}<br/>
+return: 字符串："true"操作成功，"false"操作失败
