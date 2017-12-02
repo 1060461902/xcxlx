@@ -35,6 +35,7 @@ public class SendOrderMailService {
         String user_name = showOrder.getUser_name();
         String address = showOrder.getAddress();
         String phone = showOrder.getPhone();
+        String user_add_message= showOrder.getUser_add_message();
         int freights = showOrder.getFreight();
         int prices = 0;
         StringBuffer buffer = new StringBuffer();
@@ -43,6 +44,7 @@ public class SendOrderMailService {
         buffer.append("<h2>用户姓名</h2>"+"<p>"+user_name+"</p>");
         buffer.append("<h2>用户地址</h2>"+"<p>"+address+"</p>");
         buffer.append("<h2>用户联系方式</h2>"+"<p>"+phone+"</p>");
+        buffer.append("<h2>用户备注</h2>"+"<p>"+user_add_message+"</p>");
         for (int i=0;i<showOrders.size();i++){
             ShowOrder indexOrder = showOrders.get(i);
             String goods_id = indexOrder.getGoods_id();

@@ -1,7 +1,9 @@
 package com.e.service.user;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.e.controller.user.LoginController;
+import com.e.dao.redis.RedisDS;
 import com.e.dao.redis.RedisSaveSession;
 import com.e.model.ErrorMsg;
 import com.e.model.user.XCXUserSessionInfo;
@@ -12,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -23,7 +26,12 @@ import java.io.InputStream;
 public class LoginService {
     @Autowired
     RedisSaveSession saveSession;
-
+    @Autowired
+    RedisDS redisDS;
+    /**
+     * 登录
+     *
+     * */
     public String login(InputStream inputStream) throws IOException {
         //获取从前端传来的json
         String json1 = StringFromIsUtil.getData(inputStream,"UTF-8");
@@ -63,5 +71,16 @@ public class LoginService {
             }
         }
         return thirdSessionId;
+    }
+    /**
+     * 保持3rd_sessionID的有效性
+     * */
+    public boolean keepId(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
+        JSONObject jsonObject = JSON.parseObject(json);
+        //获取前端传来的3rd_sessionID
+        String thirdSessionID = jsonObject.getString("thirdsessionid");
+        return redisDS.resetExpireTime(thirdSessionID,30*60*60*24);
     }
 }

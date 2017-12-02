@@ -150,6 +150,9 @@ public class ShowOrderService {
             String order_id = order_id_list.get(k);
             List<ShowOrder>showOrders = showOrderDao.getTheShowOrder(order_id);
             JSONObject result = new JSONObject();
+            if (showOrders.size()==0){
+               continue;
+            }
             ShowOrder showOrder = showOrders.get(0);
             result.put("express_company_id", showOrder.getExpress_company_id());
             result.put("address", showOrder.getAddress());
