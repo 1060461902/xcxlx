@@ -1,7 +1,9 @@
 package com.e.model.user;
 
 /**
- * Created by asus on 2017/10/29.
+ *
+ * @author asus
+ * @date 2017/10/29
  * 用户地址信息对象
  */
 public class UserAddress {

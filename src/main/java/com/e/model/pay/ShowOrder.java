@@ -4,6 +4,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * 商户订单信息
+ *
+ * @author asus
  * */
 public class ShowOrder {
   @JSONField(serialize = false)

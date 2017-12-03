@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by asus on 2017/11/18.
+ *
+ * @author asus
+ * @date 2017/11/18
  */
 @Repository
 public interface ShowOrderDao {

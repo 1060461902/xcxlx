@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**！！！未完成！！！
- * Created by asus on 2017/10/31.
+/**
+ *
+ * @author asus
+ * @date 2017/10/31
  * 后台货物管理Dao层
  */
 @Repository

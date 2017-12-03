@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Created by asus on 2017/11/1.
+ *
+ * @author asus
+ * @date 2017/11/1
  */
 @RestController
 @RequestMapping("/goods")

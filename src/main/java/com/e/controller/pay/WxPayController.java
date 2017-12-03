@@ -27,7 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by asus on 2017/11/6.
+ *
+ * @author asus
+ * @date 2017/11/6
  */
 @RestController
 @RequestMapping("/wxpay")
@@ -70,15 +72,20 @@ public class WxPayController {
         //设置请求参数
         Map<String, String> data = new HashMap<>();
         data.put("openid",result.getString("openid"));
-        data.put("body", "无虾不欢-用户支付");//商品描述
-        data.put("out_trade_no", result.getString("order_id"));//商户订单号
-        data.put("fee_type", "CNY");//货币类型 CNY人民币
+        //商品描述
+        data.put("body", "无虾不欢-用户支付");
+        //商户订单号
+        data.put("out_trade_no", result.getString("order_id"));
+        //货币类型 CNY人民币
+        data.put("fee_type", "CNY");
         data.put("total_fee", String.valueOf(result.getInteger("prices")+result.getInteger("freights")));
-        //System.out.println(String.valueOf(result.getInteger("prices")+result.getInteger("freights")));
-        data.put("spbill_create_ip", IPUtil.getIpAddr(request));//用户端ip地址
+        //用户端ip地址
+        data.put("spbill_create_ip", IPUtil.getIpAddr(request));
         //TODO:需要修改回调地址
-        data.put("notify_url", "http://120.78.78.116/wx/wxpay/notify_url.wx");//回调接口地址
-        data.put("trade_type", "JSAPI");  // 此处指定支付方式 小程序指定为 JSAPI
+        //回调接口地址
+        data.put("notify_url", "http://120.78.78.116/wx/wxpay/notify_url.wx");
+        // 此处指定支付方式 小程序指定为 JSAPI
+        data.put("trade_type", "JSAPI");
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -88,7 +95,8 @@ public class WxPayController {
                 String appId = resp.get("appid");
                 String prepay_id = resp.get("prepay_id");
                 String nonce_str = resp.get("nonce_str");
-                String timeStamp = String.valueOf(System.currentTimeMillis());//时间戳要以字符串的形式传给前端
+                //时间戳要以字符串的形式传给前端
+                String timeStamp = String.valueOf(System.currentTimeMillis());
                 if (resp.get("result_code").equals("SUCCESS")) {
                     jsonObject.put("prepay_id", prepay_id);
                 }else {
@@ -125,15 +133,20 @@ public class WxPayController {
         //设置请求参数
         Map<String, String> data = new HashMap<>();
         data.put("openid",result.getString("openid"));
-        data.put("body", "无虾不欢-用户支付");//商品描述
-        data.put("out_trade_no", result.getString("order_id"));//商户订单号
-        data.put("fee_type", "CNY");//货币类型 CNY人民币
+        //商品描述
+        data.put("body", "无虾不欢-用户支付");
+        //商户订单号
+        data.put("out_trade_no", result.getString("order_id"));
+        //货币类型 CNY人民币
+        data.put("fee_type", "CNY");
         data.put("total_fee", String.valueOf(result.getInteger("prices")+result.getInteger("freights")));
-        //System.out.println(String.valueOf(result.getInteger("prices")+result.getInteger("freights")));
-        data.put("spbill_create_ip", IPUtil.getIpAddr(request));//用户端ip地址
+        //用户端ip地址
+        data.put("spbill_create_ip", IPUtil.getIpAddr(request));
         //TODO:需要修改回调地址
-        data.put("notify_url", "http://120.78.78.116/wx/wxpay/notify_url.wx");//回调接口地址
-        data.put("trade_type", "JSAPI");  // 此处指定支付方式 小程序指定为 JSAPI
+        // 回调接口地址
+        data.put("notify_url", "http://120.78.78.116/wx/wxpay/notify_url.wx");
+        // 此处指定支付方式 小程序指定为 JSAPI
+        data.put("trade_type", "JSAPI");
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -143,7 +156,8 @@ public class WxPayController {
                 String appId = resp.get("appid");
                 String prepay_id = resp.get("prepay_id");
                 String nonce_str = resp.get("nonce_str");
-                String timeStamp = String.valueOf(System.currentTimeMillis());//时间戳要以字符串的形式传给前端
+                //时间戳要以字符串的形式传给前端
+                String timeStamp = String.valueOf(System.currentTimeMillis());
                 if (resp.get("result_code").equals("SUCCESS")) {
                     jsonObject.put("prepay_id", prepay_id);
                 }else {
@@ -190,12 +204,15 @@ public class WxPayController {
         //支付确认内容
         String resXml = "";
         //验证签名
-        if (wxpay.isPayResultNotifySignatureValid(notifyMap)) {        // 签名正确
+        // 签名正确
+        if (wxpay.isPayResultNotifySignatureValid(notifyMap)) {
             List<ShowOrder> orders = wxPayService.getShowOrder(notifyMap.get("out_trade_no"));
             if(orders != null) {
-                if("SUCCESS".equals(notifyMap.get("result_code"))) {    //交易成功
+                //交易成功
+                if("SUCCESS".equals(notifyMap.get("result_code"))) {
                     // TODO:更新订单
-                    wxPayService.updateOrder(notifyMap.get("out_trade_no"),1);//将订单状态设置为交易成功
+                    //将订单状态设置为交易成功
+                    wxPayService.updateOrder(notifyMap.get("out_trade_no"),1);
 
                     //TODO:发送邮件通知商家 后续需要删除 临时使用
                     sendOrderMailService.sendOrderMail(notifyMap.get("out_trade_no"));
@@ -206,7 +223,8 @@ public class WxPayController {
                     //发送通知
                     response.getWriter().println(resXml);
                 } else {    //交易失败
-                    wxPayService.updateOrder(notifyMap.get("out_trade_no"),4);//将订单状态设置为交易失败
+                    //将订单状态设置为交易失败
+                    wxPayService.updateOrder(notifyMap.get("out_trade_no"),4);
                     //设置失败确认内容
                     resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg></return_msg>" + "</xml> ";
                     System.out.println("订单" + notifyMap.get("out_trade_no") + "微信支付失败");
@@ -219,7 +237,8 @@ public class WxPayController {
             // 注意特殊情况：订单已经退款，但收到了支付结果成功的通知，不应把商户侧订单状态从退款改成支付成功
 
         } else {  // 签名错误，如果数据里没有sign字段，也认为是签名错误
-            wxPayService.updateOrder(notifyMap.get("out_trade_no"),5);//将订单状态设置为交易失败
+            //将订单状态设置为交易失败
+            wxPayService.updateOrder(notifyMap.get("out_trade_no"),5);
             //设置失败确认内容
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg></return_msg>" + "</xml> ";
             Logger logger = LoggerFactory.getLogger(WxPayController.class);

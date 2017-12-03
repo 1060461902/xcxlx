@@ -14,21 +14,10 @@ import javax.mail.internet.MimeMessage;
  */
 @Service
 public class MailService {
-    /*@Autowired
-    private MailSender mailSender;*/
     @Autowired
     private SimpleMailMessage simpleMailMessage;
     @Autowired
     private JavaMailSender javaMailSender;
-    /*//Spring 依赖注入
-    public void setMailSender(MailSender mailSender) {
-        this.mailSender = mailSender;
-    }
-
-    //Spring 依赖注入
-    public void setSimpleMailMessage(SimpleMailMessage simpleMailMessage) {
-        this.simpleMailMessage = simpleMailMessage;
-    }*/
     /**
      * 单发
      *

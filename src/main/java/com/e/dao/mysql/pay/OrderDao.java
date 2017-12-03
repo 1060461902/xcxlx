@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by asus on 2017/11/18.
+ *
+ * @author asus
+ * @date 2017/11/18
  */
 @Repository
 @MapperScan
@@ -61,22 +63,30 @@ public interface OrderDao {
     List<Order>getOnePersonTheStatusAll(@Param("status")int status, @Param("openid") String openid);
     /**
      * 更新某订单状态
+     *
      * @param order_id 订单ID
+     * @param status 订单状态
      * @return 是否成功
      * */
     boolean updateTheOrder(@Param("order_id")String order_id,@Param("status")int status);
     /**
      * 获取某人某状态的所有order_id
+     *
      * @param status 订单状态
      * @param openid 用户唯一标识
+     * @return List<String> order_id列表
      * */
     List<String> getOrderIDByPAS(@Param("status")int status, @Param("openid") String openid);
     /**
+     *获取该状态的所有不重复的order_id
      *
+     * @param status 状态码
+     * @return List<String> order_id列表
      * */
     List<String> getOrderIDByStatus(@Param("status")int status);
     /**
      * 获取对应订单号的所有订单
+     *
      * @param order_id 订单ID
      * @return 订单号对应的订单对象列表
      * */

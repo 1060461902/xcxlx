@@ -5,11 +5,16 @@ package com.e.model.goods;
  * 货物信息对象
  */
 public class Goods {
-    private String goods_id;//货物ID
-    private String goods_name;//货物名称
-    private int goods_price;//货物价格，单位 分
-    private String goods_img;//货物图片地址
-    private int goods_ava;//货物是否售卖
+    //货物ID
+    private String goods_id;
+    //货物名称
+    private String goods_name;
+    //货物价格，单位 分
+    private int goods_price;
+    //货物图片地址
+    private String goods_img;
+    //货物是否售卖
+    private int goods_ava;
     private double goods_weight;
 
     public double getGoods_weight() {

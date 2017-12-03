@@ -3,7 +3,9 @@ package com.e.model.pay;
 import java.sql.Timestamp;
 
 /**
- * Created by asus on 2017/11/18.
+ *
+ * @author asus
+ * @date 2017/11/18
  */
 public class Order {
     private String order_id;//商户订单号 openid前5位+时间戳

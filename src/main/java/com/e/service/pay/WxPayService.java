@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by asus on 2017/11/6.
+ *
+ * @author asus
+ * @date 2017/11/6
  */
 @Service
 public class WxPayService {
@@ -74,7 +76,7 @@ public class WxPayService {
             //如果重置不成功直接抛异常
             if (!b2){
                 logger.error("can't reset time:redis");
-                throw new Exception("can't reset time:redis");
+                throw new RuntimeException("can't reset time:redis");
             }
         }else {
             //如果redis中3rd_sessionID失效,返回lose
@@ -88,7 +90,7 @@ public class WxPayService {
         UserAddress userAddress = userAddressDao.getTheAddress(address_id,openid);
         if (userAddress==null){
             logger.error("can't get address");
-            throw new Exception("can't get address");
+            throw new RuntimeException("can't get address");
         }
         //总重
         double weights = 0;
@@ -115,7 +117,7 @@ public class WxPayService {
             Goods goods = goodsDao.getGoods(goods_id);
             if (goods==null){
                 logger.error("can't get GoodsInfo");
-                throw new Exception("can't get GoodsInfo");
+                throw new RuntimeException("can't get GoodsInfo");
             }
             if (goods.getGoods_ava()==0){
                 //如果缺货，返回openid为"lake"的订单对象
@@ -134,7 +136,7 @@ public class WxPayService {
             //创建订单
             if (!orderDao.insert(order)) {
                 logger.error("can't create order");
-                throw new Exception("can't create order");
+                throw new RuntimeException("can't create order");
             }
         }
         result.put("freights",Integer.parseInt(freights));
@@ -159,7 +161,6 @@ public class WxPayService {
         Order order = orders.get(0);
         String openid = order.getOpenid();
         int freights = order.getFreight();
-        //String user_add_message = order.getUser_add_message();
         int prices = 0;
         for (int i=0;i<orders.size();i++){
             Order indexOrder = orders.get(i);
@@ -259,18 +260,27 @@ public class WxPayService {
      * @return bigDecimal类型的运费 保留两位小数 单位 分
      * */
     public BigDecimal calculation(double weight, Freight freight,double firestWeight){
-        BigDecimal rd;//需要返回的rd
-        if (weight<=firestWeight){ //小于首重按首重价格
+        //需要返回的rd
+        BigDecimal rd;
+        //小于首重按首重价格
+        if (weight<=firestWeight){
             rd = new BigDecimal(freight.getFirst_weight().toString());
         }else {
-            BigDecimal firestWeightPrice = new BigDecimal(freight.getFirst_weight().toString());//首重价格
-            firestWeightPrice.setScale(1);//保留一位小数
-            BigDecimal continueWeightPrice = new BigDecimal(freight.getContinue_weight().toString());//续重价格
-            continueWeightPrice.setScale(1);//保留一位小数
-            weight = weight - firestWeight;//扣除首重后的真实重量
+            //首重价格
+            BigDecimal firestWeightPrice = new BigDecimal(freight.getFirst_weight().toString());
+            //保留一位小数
+            firestWeightPrice.setScale(1);
+            //续重价格
+            BigDecimal continueWeightPrice = new BigDecimal(freight.getContinue_weight().toString());
+            //保留一位小数
+            continueWeightPrice.setScale(1);
+            //扣除首重后的真实重量
+            weight = weight - firestWeight;
             String s = Double.toString(weight);
-            BigDecimal wgt = new BigDecimal(s);//续重真实重量
-            wgt.setScale(1,BigDecimal.ROUND_HALF_UP);//续重真实重量保留一位小数
+            //续重真实重量
+            BigDecimal wgt = new BigDecimal(s);
+            //续重真实重量保留一位小数
+            wgt.setScale(1,BigDecimal.ROUND_HALF_UP);
             int zs = (int)weight;
             BigDecimal zsbd = new BigDecimal(zs);
             BigDecimal xsbd = wgt.subtract(zsbd);
@@ -282,10 +292,12 @@ public class WxPayService {
             }else {
                 wgt = zsbd.add(half).add(half);
             }
-            BigDecimal continuprice = wgt.multiply(continueWeightPrice); //续重所需费用
+            //续重所需费用
+            BigDecimal continuprice = wgt.multiply(continueWeightPrice);
             rd = continuprice.add(firestWeightPrice);
         }
-        rd.setScale(2);//保留两位小数，精确到分
+        //保留两位小数，精确到分
+        rd.setScale(2);
         return rd;
     }
 }

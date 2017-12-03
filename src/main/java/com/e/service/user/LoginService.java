@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by asus on 2017/10/28.
+ *
+ * @author asus
+ * @date 2017/10/28
  * 调起登录service
  */
 @Service
@@ -59,7 +61,8 @@ public class LoginService {
                 boolean b = saveSession.save(
                         thirdSessionId,
                         userInfo.getSession_key()+","+userInfo.getOpenid(),
-                        60*60*24*30);//设置过期时间30天
+                        //设置过期时间30天
+                        60*60*24*30);
                 if (b==false){
                     return "Can't save into redis location:LoginController";
                 }

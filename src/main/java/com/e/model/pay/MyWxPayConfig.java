@@ -9,7 +9,9 @@ import java.io.InputStream;
 import java.util.ResourceBundle;
 
 /**
- * Created by asus on 2017/11/6.
+ *
+ * @author asus
+ * @date 2017/11/6
  */
 public class MyWxPayConfig implements WXPayConfig {
     ResourceBundle bundle = ResourceBundle.getBundle("weixin");

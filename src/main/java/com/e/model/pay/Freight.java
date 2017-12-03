@@ -1,5 +1,8 @@
 package com.e.model.pay;
 
+/**
+ * @author asus
+ */
 public class Freight {
   private String freight_id;
   private String province;

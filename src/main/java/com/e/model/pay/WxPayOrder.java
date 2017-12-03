@@ -1,7 +1,9 @@
 package com.e.model.pay;
 
 /**
- * Created by asus on 2017/11/6.
+ *
+ * @author asus
+ * @date 2017/11/6
  * https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1
  */
 @Deprecated

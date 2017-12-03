@@ -17,7 +17,9 @@ import java.net.InetAddress;
 import java.util.List;
 
 /**
- * Created by asus on 2017/11/1.
+ *
+ * @author asus
+ * @date 2017/11/1
  */
 @Service
 public class GoodsService {
@@ -39,7 +41,8 @@ public class GoodsService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        InetAddress address = InetAddress.getLocalHost();//获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
+        //获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
+        InetAddress address = InetAddress.getLocalHost();
         String hostAddress = address.getHostAddress();
         String goods_id = request.getParameter("goods_id");
         String goods_name = request.getParameter("goods_name");
@@ -91,7 +94,6 @@ public class GoodsService {
      * @return 商品信息json数组
      * */
     public String getAll(HttpServletRequest request) throws IOException {
-        //String json = StringFromIsUtil.getData(request.getInputStream(),"UTF-8");
         List<Goods>goodses = dao.getAll();
         return JSON.toJSONString(goodses, SerializerFeature.WriteMapNullValue);
     }
